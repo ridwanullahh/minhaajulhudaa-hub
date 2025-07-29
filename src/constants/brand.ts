@@ -45,26 +45,26 @@ export const PLATFORM_THEMES = {
   school: {
     primary: BRAND_COLORS.primary[700],
     secondary: BRAND_COLORS.accent[500],
-    accent: '#4f46e5', // Indigo for education
+    accent: BRAND_COLORS.primary[600],
     gradient: 'from-amber-50 via-orange-50 to-yellow-50'
   },
   masjid: {
-    primary: BRAND_COLORS.primary[800],
-    secondary: BRAND_COLORS.accent[600],
-    accent: '#059669', // Emerald for spirituality
-    gradient: 'from-emerald-50 via-teal-50 to-green-50'
+    primary: BRAND_COLORS.primary[700],
+    secondary: BRAND_COLORS.accent[500],
+    accent: BRAND_COLORS.primary[600],
+    gradient: 'from-amber-50 via-orange-50 to-yellow-50'
   },
   charity: {
-    primary: BRAND_COLORS.primary[600],
-    secondary: BRAND_COLORS.accent[400],
-    accent: '#dc2626', // Red for urgency/help
-    gradient: 'from-rose-50 via-pink-50 to-red-50'
+    primary: BRAND_COLORS.primary[700],
+    secondary: BRAND_COLORS.accent[500],
+    accent: BRAND_COLORS.primary[600],
+    gradient: 'from-amber-50 via-orange-50 to-yellow-50'
   },
   travels: {
     primary: BRAND_COLORS.primary[700],
     secondary: BRAND_COLORS.accent[500],
-    accent: '#2563eb', // Blue for travel/adventure
-    gradient: 'from-blue-50 via-sky-50 to-cyan-50'
+    accent: BRAND_COLORS.primary[600],
+    gradient: 'from-amber-50 via-orange-50 to-yellow-50'
   }
 } as const;
 
