@@ -7,25 +7,35 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 25 45% 15%; /* Brand brown */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 25 45% 15%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 84% 4.9%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 25 45% 15%;
+    --primary: 25 45% 33%; /* Brand primary brown */
+    --primary-foreground: 35 100% 98%;
+    --secondary: 43 74% 49%; /* Brand gold */
+    --secondary-foreground: 25 45% 15%;
+    --muted: 35 100% 96%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 43 74% 49%; /* Brand gold accent */
+    --accent-foreground: 25 45% 15%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
+    --border: 35 100% 91%;
+    --input: 35 100% 91%;
+    --ring: 25 45% 33%;
+    --radius: 0.75rem;
+
+    /* Brand color variables */
+    --brand-primary-900: 25 45% 15%;
+    --brand-primary-700: 25 45% 33%;
+    --brand-primary-500: 28 46% 54%;
+    --brand-primary-300: 36 59% 70%;
+    --brand-primary-100: 35 100% 87%;
+    --brand-accent-600: 43 74% 49%;
+    --brand-accent-500: 43 89% 38%;
+    --brand-accent-300: 51 100% 50%;
   }
 
   .dark {
@@ -58,4 +68,23 @@
   body {
     @apply bg-background text-foreground font-inter;
   }
+}
+
+/* Custom animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes float-delayed {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-delayed 8s ease-in-out infinite;
 }

@@ -1,15 +1,52 @@
 
 import UniversalSDK from './github-db-sdk';
 
-// SDK Configuration - replace with your actual GitHub repo details
+// SDK Configuration - using environment variables for security
 const sdkConfig = {
-  owner: 'your-username', // Replace with your GitHub username
-  repo: 'minhaajulhudaa-data', // Replace with your GitHub repo name
-  token: 'your-github-token', // Replace with your GitHub personal access token
+  owner: 'ridwanullahh', // GitHub username
+  repo: 'minhaajulhudaa-hub', // Current repository
+  token: import.meta.env.VITE_GITHUB_TOKEN || 'ghp_placeholder_token', // GitHub token from env
   branch: 'main',
-  basePath: 'db',
+  basePath: 'data', // Platform-specific data folders
   mediaPath: 'media',
   schemas: {
+    // Universal schemas
+    users: {
+      required: ['email', 'platform'],
+      types: {
+        email: 'string',
+        name: 'string',
+        platform: 'string',
+        role: 'string',
+        verified: 'boolean',
+        createdAt: 'date'
+      }
+    },
+    blog_posts: {
+      required: ['title', 'content', 'platform'],
+      types: {
+        title: 'string',
+        content: 'string',
+        excerpt: 'string',
+        platform: 'string',
+        author: 'string',
+        publishedAt: 'date',
+        status: 'string',
+        featured: 'boolean',
+        tags: 'array'
+      }
+    },
+    pages: {
+      required: ['title', 'content', 'platform'],
+      types: {
+        title: 'string',
+        content: 'string',
+        slug: 'string',
+        platform: 'string',
+        status: 'string',
+        updatedAt: 'date'
+      }
+    },
     // School schemas
     students: {
       required: ['name', 'email', 'class'],
@@ -18,7 +55,9 @@ const sdkConfig = {
         email: 'string',
         class: 'string',
         enrollmentDate: 'date',
-        status: 'string'
+        status: 'string',
+        parentContact: 'string',
+        address: 'string'
       }
     },
     courses: {
@@ -28,18 +67,31 @@ const sdkConfig = {
         description: 'string',
         instructor: 'string',
         duration: 'number',
-        level: 'string'
+        level: 'string',
+        price: 'number',
+        status: 'string'
       }
     },
-    blog_posts: {
-      required: ['title', 'content', 'platform'],
+    classes: {
+      required: ['name', 'level'],
+      types: {
+        name: 'string',
+        level: 'string',
+        capacity: 'number',
+        enrolled: 'number',
+        teacher: 'string',
+        schedule: 'string'
+      }
+    },
+    programs: {
+      required: ['title', 'type'],
       types: {
         title: 'string',
-        content: 'string',
-        platform: 'string',
-        author: 'string',
-        publishedAt: 'date',
-        status: 'string'
+        description: 'string',
+        type: 'string',
+        duration: 'string',
+        requirements: 'array',
+        benefits: 'array'
       }
     },
     // Masjid schemas
@@ -48,10 +100,16 @@ const sdkConfig = {
       types: {
         date: 'date',
         fajr: 'string',
+        fajrIqamah: 'string',
         dhuhr: 'string',
+        dhuhrIqamah: 'string',
         asr: 'string',
+        asrIqamah: 'string',
         maghrib: 'string',
-        isha: 'string'
+        maghribIqamah: 'string',
+        isha: 'string',
+        ishaIqamah: 'string',
+        jumah: 'string'
       }
     },
     events: {
@@ -60,8 +118,35 @@ const sdkConfig = {
         title: 'string',
         description: 'string',
         date: 'date',
+        endDate: 'date',
         platform: 'string',
-        location: 'string'
+        location: 'string',
+        category: 'string',
+        featured: 'boolean'
+      }
+    },
+    audio_library: {
+      required: ['title', 'speaker'],
+      types: {
+        title: 'string',
+        speaker: 'string',
+        description: 'string',
+        audioUrl: 'string',
+        duration: 'string',
+        category: 'string',
+        language: 'string',
+        uploadDate: 'date'
+      }
+    },
+    announcements: {
+      required: ['title', 'content'],
+      types: {
+        title: 'string',
+        content: 'string',
+        priority: 'string',
+        expiryDate: 'date',
+        active: 'boolean',
+        createdAt: 'date'
       }
     },
     // Charity schemas
@@ -73,6 +158,9 @@ const sdkConfig = {
         target: 'number',
         raised: 'number',
         status: 'string',
+        category: 'string',
+        endDate: 'date',
+        featured: 'boolean',
         createdAt: 'date'
       }
     },
@@ -82,7 +170,46 @@ const sdkConfig = {
         amount: 'number',
         campaign: 'string',
         donor: 'string',
+        donorEmail: 'string',
         currency: 'string',
+        paymentMethod: 'string',
+        anonymous: 'boolean',
+        createdAt: 'date'
+      }
+    },
+    projects: {
+      required: ['title', 'description'],
+      types: {
+        title: 'string',
+        description: 'string',
+        location: 'string',
+        beneficiaries: 'number',
+        status: 'string',
+        images: 'array',
+        startDate: 'date'
+      }
+    },
+    volunteers: {
+      required: ['name', 'email', 'skills'],
+      types: {
+        name: 'string',
+        email: 'string',
+        phone: 'string',
+        skills: 'array',
+        availability: 'string',
+        experience: 'string',
+        status: 'string'
+      }
+    },
+    testimonials: {
+      required: ['name', 'content'],
+      types: {
+        name: 'string',
+        content: 'string',
+        location: 'string',
+        image: 'string',
+        rating: 'number',
+        featured: 'boolean',
         createdAt: 'date'
       }
     },
@@ -95,7 +222,11 @@ const sdkConfig = {
         price: 'number',
         type: 'string',
         duration: 'number',
-        available: 'boolean'
+        maxPeople: 'number',
+        available: 'boolean',
+        features: 'array',
+        itinerary: 'array',
+        images: 'array'
       }
     },
     bookings: {
@@ -103,9 +234,38 @@ const sdkConfig = {
       types: {
         package: 'string',
         customer: 'string',
+        customerEmail: 'string',
         status: 'string',
         totalAmount: 'number',
-        bookingDate: 'date'
+        paidAmount: 'number',
+        travelers: 'number',
+        specialRequests: 'string',
+        bookingDate: 'date',
+        travelDate: 'date'
+      }
+    },
+    reviews: {
+      required: ['package', 'customer', 'rating'],
+      types: {
+        package: 'string',
+        customer: 'string',
+        rating: 'number',
+        comment: 'string',
+        verified: 'boolean',
+        createdAt: 'date'
+      }
+    },
+    customers: {
+      required: ['name', 'email'],
+      types: {
+        name: 'string',
+        email: 'string',
+        phone: 'string',
+        address: 'string',
+        passportNumber: 'string',
+        emergencyContact: 'string',
+        preferences: 'object',
+        totalBookings: 'number'
       }
     }
   }

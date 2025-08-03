@@ -1,6 +1,9 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { usePlatform } from '@/hooks/usePlatform';
+import PlatformNavigation from '@/components/navigation/PlatformNavigation';
+import PlatformFooter from '@/components/layout/PlatformFooter';
+import { initializeAllPlatforms } from '@/lib/platform-db';
 
 interface PlatformLayoutProps {
   children: React.ReactNode;
@@ -8,9 +11,14 @@ interface PlatformLayoutProps {
 
 const PlatformLayout: React.FC<PlatformLayoutProps> = ({ children }) => {
   const { theme, config, platform } = usePlatform();
-  
+
+  // Initialize platform databases on mount
+  useEffect(() => {
+    initializeAllPlatforms().catch(console.error);
+  }, []);
+
   return (
-    <div 
+    <div
       className={`min-h-screen bg-gradient-to-br ${theme.gradient}`}
       style={{
         '--platform-primary': theme.primary,
@@ -31,15 +39,23 @@ const PlatformLayout: React.FC<PlatformLayoutProps> = ({ children }) => {
             .border-platform-primary { border-color: ${theme.primary}; }
             .hover\\:bg-platform-primary:hover { background-color: ${theme.primary}; }
             .hover\\:text-platform-primary:hover { color: ${theme.primary}; }
+            .hover\\:bg-platform-primary\\/10:hover { background-color: ${theme.primary}1a; }
+            .text-platform-primary { color: ${theme.primary}; }
+            .text-platform-secondary { color: ${theme.secondary}; }
+            .text-platform-accent { color: ${theme.accent}; }
           `}
         </style>
-        
-        {/* Platform indicator for development */}
-        <div className="fixed top-4 right-4 z-50 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold shadow-lg">
-          <span className="platform-primary">{config.name}</span>
-        </div>
-        
-        {children}
+
+        {/* Navigation */}
+        <PlatformNavigation />
+
+        {/* Main Content */}
+        <main className="min-h-screen">
+          {children}
+        </main>
+
+        {/* Footer */}
+        <PlatformFooter />
       </div>
     </div>
   );

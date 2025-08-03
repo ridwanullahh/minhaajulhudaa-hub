@@ -46,25 +46,37 @@ export const PLATFORM_THEMES = {
     primary: BRAND_COLORS.primary[700],
     secondary: BRAND_COLORS.accent[500],
     accent: BRAND_COLORS.primary[600],
-    gradient: 'from-amber-50 via-orange-50 to-yellow-50'
+    gradient: 'from-amber-50 via-orange-50 to-yellow-50',
+    heroGradient: 'from-amber-900/20 via-orange-800/10 to-yellow-700/20',
+    cardGradient: 'from-amber-100/50 to-orange-100/30',
+    textGradient: 'from-amber-800 via-orange-700 to-yellow-600'
   },
   masjid: {
     primary: BRAND_COLORS.primary[700],
-    secondary: BRAND_COLORS.accent[500],
-    accent: BRAND_COLORS.primary[600],
-    gradient: 'from-amber-50 via-orange-50 to-yellow-50'
+    secondary: BRAND_COLORS.accent[600],
+    accent: BRAND_COLORS.primary[500],
+    gradient: 'from-emerald-50 via-teal-50 to-cyan-50',
+    heroGradient: 'from-emerald-900/20 via-teal-800/10 to-cyan-700/20',
+    cardGradient: 'from-emerald-100/50 to-teal-100/30',
+    textGradient: 'from-emerald-800 via-teal-700 to-cyan-600'
   },
   charity: {
     primary: BRAND_COLORS.primary[700],
-    secondary: BRAND_COLORS.accent[500],
-    accent: BRAND_COLORS.primary[600],
-    gradient: 'from-amber-50 via-orange-50 to-yellow-50'
+    secondary: BRAND_COLORS.accent[400],
+    accent: BRAND_COLORS.primary[500],
+    gradient: 'from-rose-50 via-pink-50 to-red-50',
+    heroGradient: 'from-rose-900/20 via-pink-800/10 to-red-700/20',
+    cardGradient: 'from-rose-100/50 to-pink-100/30',
+    textGradient: 'from-rose-800 via-pink-700 to-red-600'
   },
   travels: {
     primary: BRAND_COLORS.primary[700],
     secondary: BRAND_COLORS.accent[500],
     accent: BRAND_COLORS.primary[600],
-    gradient: 'from-amber-50 via-orange-50 to-yellow-50'
+    gradient: 'from-blue-50 via-indigo-50 to-purple-50',
+    heroGradient: 'from-blue-900/20 via-indigo-800/10 to-purple-700/20',
+    cardGradient: 'from-blue-100/50 to-indigo-100/30',
+    textGradient: 'from-blue-800 via-indigo-700 to-purple-600'
   }
 } as const;
 
