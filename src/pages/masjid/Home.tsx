@@ -7,7 +7,7 @@ import {
   Heart, 
   Users, 
   BookOpen,
-  Mosque,
+  Home as Mosque,
   Star,
   Play,
   Pause,
