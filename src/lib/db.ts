@@ -5,9 +5,9 @@ import UniversalSDK from './github-db-sdk';
 const sdkConfig = {
   owner: 'ridwanullahh', // GitHub username
   repo: 'minhaajulhudaa-hub', // Current repository
-  token: import.meta.env.VITE_GITHUB_TOKEN || 'ghp_placeholder_token', // GitHub token from env
+  token: import.meta.env.VITE_GITHUB_TOKEN || process.env.GITHUB_TOKEN || 'ghp_placeholder_token', // GitHub token from env
   branch: 'main',
-  basePath: 'data', // Platform-specific data folders
+  basePath: 'data', // Platform-specific data folders (school/, masjid/, charity/, travels/)
   mediaPath: 'media',
   schemas: {
     // Universal schemas

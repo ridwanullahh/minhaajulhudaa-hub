@@ -1,6 +1,7 @@
 
 import React, { useEffect } from 'react';
 import { usePlatform } from '@/hooks/usePlatform';
+import PlatformHeader from '@/components/layout/PlatformHeader';
 import PlatformNavigation from '@/components/navigation/PlatformNavigation';
 import PlatformFooter from '@/components/layout/PlatformFooter';
 import { initializeAllPlatforms } from '@/lib/platform-db';
@@ -45,6 +46,9 @@ const PlatformLayout: React.FC<PlatformLayoutProps> = ({ children }) => {
             .text-platform-accent { color: ${theme.accent}; }
           `}
         </style>
+
+        {/* Header */}
+        <PlatformHeader />
 
         {/* Navigation */}
         <PlatformNavigation />

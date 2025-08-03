@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  BookOpen, 
-  Users, 
-  Award, 
-  Calendar, 
-  ArrowRight, 
+import {
+  BookOpen,
+  Users,
+  Award,
+  Calendar,
+  ArrowRight,
   Star,
   GraduationCap,
   Heart,
   Globe,
-  Shield
+  Shield,
+  TrendingUp,
+  Clock,
+  CheckCircle,
+  Play
 } from 'lucide-react';
 import { ModernButton } from '@/components/ui/ModernButton';
 import { ModernCard } from '@/components/ui/ModernCard';
