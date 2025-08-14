@@ -53,12 +53,14 @@ class RealTimeGitHubDB {
     } catch (error: any) {
       if (error.status === 404) {
         // Create empty collection
+        const content = JSON.stringify([], null, 2);
+        const base64Content = btoa(unescape(encodeURIComponent(content)));
         await this.octokit.repos.createOrUpdateFileContents({
           owner: this.owner,
           repo: this.repo,
           path,
           message: `Auto-create ${platform}/${collection} collection`,
-          content: Buffer.from(JSON.stringify([], null, 2)).toString('base64'),
+          content: base64Content,
           branch: this.branch,
         });
         console.log(`Created collection: ${platform}/${collection}`);
@@ -82,7 +84,7 @@ class RealTimeGitHubDB {
       });
 
       if ('content' in response.data) {
-        const content = Buffer.from(response.data.content, 'base64').toString();
+        const content = decodeURIComponent(escape(atob(response.data.content)));
         const data = JSON.parse(content) as T[];
         
         // Update cache
@@ -183,12 +185,14 @@ class RealTimeGitHubDB {
 
       const sha = 'sha' in currentFile.data ? currentFile.data.sha : undefined;
 
+      const content = JSON.stringify(data, null, 2);
+      const base64Content = btoa(unescape(encodeURIComponent(content)));
       await this.octokit.repos.createOrUpdateFileContents({
         owner: this.owner,
         repo: this.repo,
         path,
         message: `Update ${platform}/${collection} collection`,
-        content: Buffer.from(JSON.stringify(data, null, 2)).toString('base64'),
+        content: base64Content,
         sha,
         branch: this.branch,
       });

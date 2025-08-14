@@ -173,7 +173,10 @@ const MasjidHome = () => {
                       }`}
                     >
                       <span className="font-medium text-white">{prayer.name}</span>
-                      <span className="text-emerald-300 font-mono">{prayer.time}</span>
+                      <div className="text-right">
+                        <div className="text-emerald-300 font-mono text-sm">{prayer.time.adhan}</div>
+                        <div className="text-emerald-200 font-mono text-xs">{prayer.time.iqamah}</div>
+                      </div>
                     </div>
                   ))}
                 </div>
