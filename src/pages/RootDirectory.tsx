@@ -92,22 +92,6 @@ const RootDirectory = () => {
                   {platform.description}
                 </p>
                 
-                <div className="mb-6">
-                  <h4 className="text-sm font-semibold mb-3" style={{ color: '#dd9d08' }}>
-                    Key Features:
-                  </h4>
-                  <div className="flex flex-wrap gap-2 justify-center">
-                    {platform.features.map((feature, idx) => (
-                      <span 
-                        key={idx}
-                        className="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs font-medium"
-                      >
-                        {feature}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                
                 <ModernButton 
                   className="w-full"
                   onClick={() => navigate(`/${platform.slug}`)}
@@ -125,8 +109,22 @@ const RootDirectory = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <p className="text-lg text-amber-900 mb-4">
-              Built with love for the Muslim community
+              © 2024 Minhaajulhudaa Platform. All rights reserved.
             </p>
+            <div className="flex justify-center space-x-6 mb-4">
+              <a href="#" className="text-amber-700 hover:text-amber-900 transition-colors">
+                Facebook
+              </a>
+              <a href="#" className="text-amber-700 hover:text-amber-900 transition-colors">
+                Twitter
+              </a>
+              <a href="#" className="text-amber-700 hover:text-amber-900 transition-colors">
+                Instagram
+              </a>
+              <a href="#" className="text-amber-700 hover:text-amber-900 transition-colors">
+                YouTube
+              </a>
+            </div>
             <div className="flex justify-center space-x-6">
               <span className="text-sm text-gray-600">All platforms share the same brand identity</span>
               <span className="text-sm text-gray-600">•</span>
