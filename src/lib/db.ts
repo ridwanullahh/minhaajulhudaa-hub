@@ -3,8 +3,8 @@ import UniversalSDK from './github-db-sdk';
 
 // SDK Configuration - using environment variables for security
 const sdkConfig = {
-  owner: 'ridwanullahh', // GitHub username
-  repo: 'minhaajulhudaa-hub', // Current repository
+  owner: import.meta.env.VITE_GITHUB_USER, // GitHub username
+  repo: import.meta.env.VITE_GITHUB_REPO, // Current repository
   token: import.meta.env.VITE_GITHUB_TOKEN || process.env.GITHUB_TOKEN || 'ghp_placeholder_token', // GitHub token from env
   branch: 'main',
   basePath: 'data', // Platform-specific data folders (school/, masjid/, charity/, travels/)
