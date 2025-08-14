@@ -7,7 +7,7 @@ import {
   Heart, 
   Users, 
   BookOpen,
-  Mosque,
+  Home as Mosque,
   Star,
   Play,
   Pause,
@@ -19,12 +19,12 @@ import { masjidDB } from '@/lib/platform-db';
 
 const MasjidHome = () => {
   const [prayerTimes, setPrayerTimes] = useState({
-    fajr: '5:30 AM',
-    dhuhr: '12:45 PM',
-    asr: '4:15 PM',
-    maghrib: '6:30 PM',
-    isha: '8:00 PM',
-    jumah: '1:00 PM'
+    fajr: { adhan: '5:30 AM', iqamah: '5:45 AM' },
+    dhuhr: { adhan: '12:45 PM', iqamah: '1:00 PM' },
+    asr: { adhan: '4:15 PM', iqamah: '4:30 PM' },
+    maghrib: { adhan: '6:30 PM', iqamah: '6:35 PM' },
+    isha: { adhan: '8:00 PM', iqamah: '8:15 PM' },
+    jumah: { adhan: '1:00 PM', iqamah: '1:15 PM' }
   });
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [isQuranPlaying, setIsQuranPlaying] = useState(false);
