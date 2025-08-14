@@ -2,8 +2,8 @@ import RealTimeGitHubDB from './real-time-github-db';
 
 // Initialize the real-time GitHub database
 const githubDB = new RealTimeGitHubDB({
-  owner: 'ridwanullahh',
-  repo: 'minhaajulhudaa-hub',
+  owner: import.meta.env.VITE_GITHUB_USER,
+  repo: import.meta.env.VITE_GITHUB_REPO,
   token: import.meta.env.VITE_GITHUB_TOKEN || process.env.GITHUB_TOKEN || 'ghp_placeholder_token',
   branch: 'main'
 });
