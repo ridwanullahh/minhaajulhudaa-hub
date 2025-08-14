@@ -327,6 +327,120 @@ class RealTimeGitHubDB {
     
     for (const platform of platforms) {
       await this.initializePlatform(platform);
+      await this.seedPlatformData(platform);
+    }
+  }
+
+  async seedPlatformData(platform: string): Promise<void> {
+    try {
+      switch (platform) {
+        case 'school':
+          await this.seedSchoolData();
+          break;
+        case 'masjid':
+          await this.seedMasjidData();
+          break;
+        case 'charity':
+          await this.seedCharityData();
+          break;
+        case 'travels':
+          await this.seedTravelsData();
+          break;
+      }
+    } catch (error) {
+      console.error(`Error seeding ${platform} data:`, error);
+    }
+  }
+
+  private async seedSchoolData(): Promise<void> {
+    // Seed blog posts
+    const blogPosts = await this.get('school', 'blog_posts');
+    if (blogPosts.length === 0) {
+      await this.insert('school', 'blog_posts', {
+        title: 'Welcome to Minhaajulhudaa School',
+        content: 'We are delighted to welcome you to our Islamic educational institution...',
+        excerpt: 'Discover our comprehensive Islamic education programs',
+        author: 'School Administration',
+        publishedAt: new Date().toISOString(),
+        tags: ['welcome', 'education', 'islam'],
+        featured: true
+      });
+    }
+
+    // Seed events
+    const events = await this.get('school', 'events');
+    if (events.length === 0) {
+      await this.insert('school', 'events', {
+        title: 'School Opening Ceremony',
+        description: 'Join us for the grand opening of Minhaajulhudaa School',
+        date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        location: 'School Auditorium',
+        type: 'ceremony'
+      });
+    }
+  }
+
+  private async seedMasjidData(): Promise<void> {
+    // Seed prayer times
+    const prayerTimes = await this.get('masjid', 'prayer_times');
+    if (prayerTimes.length === 0) {
+      const today = new Date().toISOString().split('T')[0];
+      await this.insert('masjid', 'prayer_times', {
+        date: today,
+        fajr: { adhan: '5:30 AM', iqamah: '5:45 AM' },
+        dhuhr: { adhan: '12:45 PM', iqamah: '1:00 PM' },
+        asr: { adhan: '4:15 PM', iqamah: '4:30 PM' },
+        maghrib: { adhan: '6:30 PM', iqamah: '6:35 PM' },
+        isha: { adhan: '8:00 PM', iqamah: '8:15 PM' },
+        jumah: { adhan: '1:00 PM', iqamah: '1:15 PM' }
+      });
+    }
+
+    // Seed events
+    const events = await this.get('masjid', 'events');
+    if (events.length === 0) {
+      await this.insert('masjid', 'events', {
+        title: 'Friday Prayer',
+        description: 'Weekly Jumah prayer with khutbah',
+        date: new Date().toISOString(),
+        location: 'Main Prayer Hall',
+        type: 'prayer'
+      });
+    }
+  }
+
+  private async seedCharityData(): Promise<void> {
+    // Seed campaigns
+    const campaigns = await this.get('charity', 'campaigns');
+    if (campaigns.length === 0) {
+      await this.insert('charity', 'campaigns', {
+        title: 'Clean Water Initiative',
+        description: 'Help us provide clean drinking water to communities in need',
+        goal: 10000,
+        raised: 2500,
+        currency: 'USD',
+        startDate: new Date().toISOString(),
+        endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+        category: 'water',
+        featured: true
+      });
+    }
+  }
+
+  private async seedTravelsData(): Promise<void> {
+    // Seed packages
+    const packages = await this.get('travels', 'packages');
+    if (packages.length === 0) {
+      await this.insert('travels', 'packages', {
+        title: 'Umrah Package 2024',
+        description: 'Experience the spiritual journey of Umrah with our comprehensive package',
+        price: 2500,
+        currency: 'USD',
+        duration: '10 days',
+        includes: ['Flights', 'Hotel', 'Visa', 'Transportation'],
+        category: 'umrah',
+        featured: true
+      });
     }
   }
 }
