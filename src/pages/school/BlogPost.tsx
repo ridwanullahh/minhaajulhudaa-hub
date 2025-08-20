@@ -203,8 +203,8 @@ const SchoolBlogPost = () => {
     return (
       <div className="min-h-screen py-20 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-platform-primary mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading blog post...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading blog post...</p>
         </div>
       </div>
     );
@@ -214,8 +214,8 @@ const SchoolBlogPost = () => {
     return (
       <div className="min-h-screen py-20 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">Post Not Found</h1>
-          <p className="text-xl text-gray-600 mb-8">The blog post you're looking for doesn't exist.</p>
+          <h1 className="text-4xl font-bold text-foreground mb-4">Post Not Found</h1>
+          <p className="text-xl text-muted-foreground mb-8">The blog post you're looking for doesn't exist.</p>
           <Link to="/school/blog">
             <ModernButton size="lg">
               Back to Blog
@@ -227,7 +227,7 @@ const SchoolBlogPost = () => {
   }
 
   return (
-    <div className="min-h-screen py-20">
+    <div className="min-h-screen py-20 bg-muted/50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back Button */}
         <div className="mb-8">
@@ -240,9 +240,9 @@ const SchoolBlogPost = () => {
 
         {/* Article Header */}
         <ModernCard variant="glass" className="mb-8 overflow-hidden">
-          <div className="aspect-w-16 aspect-h-10 bg-gray-100 relative overflow-hidden mb-8">
-            <div className="w-full h-64 bg-gradient-to-br from-amber-600/10 to-orange-600/10 flex items-center justify-center">
-              <div className="text-amber-600/30">
+          <div className="aspect-w-16 aspect-h-10 bg-muted relative overflow-hidden mb-8">
+            <div className="w-full h-64 bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center">
+              <div className="text-primary/30">
                 <svg className="w-24 h-24" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
                   <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd"/>
@@ -252,7 +252,7 @@ const SchoolBlogPost = () => {
             
             {post.featured && (
               <div className="absolute top-4 left-4">
-                <span className="bg-amber-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                <span className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-medium">
                   Featured
                 </span>
               </div>
@@ -261,43 +261,43 @@ const SchoolBlogPost = () => {
 
           <div className="p-8">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-sm text-amber-600 font-medium capitalize">
+              <span className="text-sm text-primary font-medium capitalize">
                 {post.category}
               </span>
-              <div className="flex items-center text-gray-500 text-sm">
+              <div className="flex items-center text-muted-foreground text-sm">
                 <Clock className="w-4 h-4 mr-1" />
                 {post.readTime} min read
               </div>
             </div>
 
-            <h1 className="text-3xl lg:text-4xl font-bold text-gray-800 mb-6">
+            <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
               {post.title}
             </h1>
 
-            <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+            <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
               {post.excerpt}
             </p>
 
             <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center text-gray-600">
+              <div className="flex items-center text-muted-foreground">
                 <User className="w-5 h-5 mr-2" />
-                <span className="font-medium">{post.author}</span>
+                <span className="font-medium text-foreground">{post.author}</span>
               </div>
-              <div className="flex items-center text-gray-600">
+              <div className="flex items-center text-muted-foreground">
                 <Calendar className="w-5 h-5 mr-2" />
                 <span>{formatDate(post.publishDate)}</span>
               </div>
             </div>
 
-            <div className="flex items-center justify-between pt-6 border-t border-gray-200">
-              <div className="flex items-center space-x-6 text-gray-500">
+            <div className="flex items-center justify-between pt-6 border-t">
+              <div className="flex items-center space-x-6 text-muted-foreground">
                 <div className="flex items-center">
                   <Eye className="w-5 h-5 mr-1" />
                   <span>{post.views}</span>
                 </div>
                 <button
                   onClick={handleLike}
-                  className={`flex items-center ${liked ? 'text-red-500' : 'hover:text-red-500'} transition-colors`}
+                  className={`flex items-center ${liked ? 'text-destructive' : 'hover:text-destructive'} transition-colors`}
                 >
                   <Heart className={`w-5 h-5 mr-1 ${liked ? 'fill-current' : ''}`} />
                   <span>{post.likes}</span>
@@ -311,19 +311,19 @@ const SchoolBlogPost = () => {
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => sharePost('facebook')}
-                  className="p-2 text-gray-500 hover:text-blue-600 transition-colors"
+                  className="p-2 text-muted-foreground hover:text-blue-600 transition-colors"
                 >
                   <Facebook className="w-5 h-5" />
                 </button>
                 <button
                   onClick={() => sharePost('twitter')}
-                  className="p-2 text-gray-500 hover:text-blue-400 transition-colors"
+                  className="p-2 text-muted-foreground hover:text-blue-400 transition-colors"
                 >
                   <Twitter className="w-5 h-5" />
                 </button>
                 <button
                   onClick={() => sharePost('email')}
-                  className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+                  className="p-2 text-muted-foreground hover:text-foreground transition-colors"
                 >
                   <Mail className="w-5 h-5" />
                 </button>
@@ -334,14 +334,14 @@ const SchoolBlogPost = () => {
 
         {/* Article Content */}
         <ModernCard variant="glass" className="mb-8 p-8">
-          <div className="prose prose-lg max-w-none">
-            <p className="text-gray-700 leading-relaxed mb-6">
+          <div className="prose prose-lg max-w-none text-foreground">
+            <p className="leading-relaxed mb-6">
               {post.content}
             </p>
             
             <div className="mb-8">
-              <h3 className="text-xl font-bold text-gray-800 mb-4">Key Takeaways</h3>
-              <ul className="list-disc list-inside text-gray-700 space-y-2">
+              <h3 className="text-xl font-bold text-foreground mb-4">Key Takeaways</h3>
+              <ul className="list-disc list-inside space-y-2">
                 <li>Islamic education provides a strong foundation of faith</li>
                 <li>Modern teaching methods enhance traditional Islamic learning</li>
                 <li>Character development is central to our educational approach</li>
@@ -349,9 +349,9 @@ const SchoolBlogPost = () => {
               </ul>
             </div>
 
-            <div className="bg-amber-50 border-l-4 border-amber-600 p-6 mb-8">
-              <h4 className="font-bold text-amber-800 mb-2">About the Author</h4>
-              <p className="text-amber-700">
+            <div className="bg-primary/10 border-l-4 border-primary p-6 mb-8">
+              <h4 className="font-bold text-primary mb-2">About the Author</h4>
+              <p className="text-primary/80">
                 {post.author} is an experienced educator and Islamic scholar dedicated to providing 
                 quality Islamic education that prepares students for success in this world and the hereafter.
               </p>
@@ -360,16 +360,16 @@ const SchoolBlogPost = () => {
 
           {/* Tags */}
           {post.tags.length > 0 && (
-            <div className="pt-6 border-t border-gray-200">
+            <div className="pt-6 border-t">
               <div className="flex items-center mb-3">
-                <Tag className="w-5 h-5 text-gray-500 mr-2" />
-                <span className="font-medium text-gray-700">Tags:</span>
+                <Tag className="w-5 h-5 text-muted-foreground mr-2" />
+                <span className="font-medium text-foreground">Tags:</span>
               </div>
               <div className="flex flex-wrap gap-2">
                 {post.tags.map((tag, index) => (
                   <span
                     key={index}
-                    className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-sm hover:bg-amber-200 transition-colors cursor-pointer"
+                    className="px-3 py-1 bg-muted text-muted-foreground rounded-full text-sm hover:bg-primary/20 transition-colors cursor-pointer"
                   >
                     #{tag}
                   </span>
@@ -381,7 +381,7 @@ const SchoolBlogPost = () => {
 
         {/* Comments Section */}
         <ModernCard variant="glass" className="mb-8 p-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">
+          <h2 className="text-2xl font-bold text-foreground mb-6">
             Comments ({comments.length})
           </h2>
 
@@ -389,39 +389,39 @@ const SchoolBlogPost = () => {
           <form onSubmit={handleCommentSubmit} className="mb-8">
             <div className="grid md:grid-cols-2 gap-4 mb-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Name *
                 </label>
                 <input
                   type="text"
                   value={commentAuthor}
                   onChange={(e) => setCommentAuthor(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-background"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Email *
                 </label>
                 <input
                   type="email"
                   value={commentEmail}
                   onChange={(e) => setCommentEmail(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-background"
                   required
                 />
               </div>
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Comment *
               </label>
               <textarea
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 rows={4}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-background"
                 required
               />
             </div>
@@ -433,26 +433,26 @@ const SchoolBlogPost = () => {
           {/* Comments List */}
           <div className="space-y-6">
             {comments.map((comment) => (
-              <div key={comment.id} className="border-b border-gray-200 pb-6 last:border-0">
+              <div key={comment.id} className="border-b pb-6 last:border-0">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center">
-                    <div className="w-10 h-10 bg-amber-600 rounded-full flex items-center justify-center text-white font-bold mr-3">
+                    <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-bold mr-3">
                       {comment.author.charAt(0).toUpperCase()}
                     </div>
                     <div>
-                      <h4 className="font-medium text-gray-800">{comment.author}</h4>
-                      <p className="text-sm text-gray-500">{formatCommentDate(comment.createdAt)}</p>
+                      <h4 className="font-medium text-foreground">{comment.author}</h4>
+                      <p className="text-sm text-muted-foreground">{formatCommentDate(comment.createdAt)}</p>
                     </div>
                   </div>
                 </div>
-                <p className="text-gray-700 ml-13">{comment.content}</p>
+                <p className="text-foreground/90 ml-13">{comment.content}</p>
               </div>
             ))}
           </div>
 
           {comments.length === 0 && (
             <div className="text-center py-8">
-              <p className="text-gray-500">No comments yet. Be the first to comment!</p>
+              <p className="text-muted-foreground">No comments yet. Be the first to comment!</p>
             </div>
           )}
         </ModernCard>
@@ -460,14 +460,14 @@ const SchoolBlogPost = () => {
         {/* Related Posts */}
         {relatedPosts.length > 0 && (
           <ModernCard variant="glass" className="p-8">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">Related Posts</h2>
+            <h2 className="text-2xl font-bold text-foreground mb-6">Related Posts</h2>
             <div className="grid md:grid-cols-3 gap-6">
               {relatedPosts.map((relatedPost) => (
                 <Link key={relatedPost.id} to={`/school/blog/${relatedPost.id}`}>
                   <div className="group cursor-pointer">
-                    <div className="aspect-w-16 aspect-h-10 bg-gray-100 rounded-lg mb-4 overflow-hidden">
-                      <div className="w-full h-32 bg-gradient-to-br from-amber-600/10 to-orange-600/10 flex items-center justify-center">
-                        <div className="text-amber-600/30">
+                    <div className="aspect-w-16 aspect-h-10 bg-muted rounded-lg mb-4 overflow-hidden">
+                      <div className="w-full h-32 bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center">
+                        <div className="text-primary/30">
                           <svg className="w-12 h-12" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
                             <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd"/>
@@ -475,10 +475,10 @@ const SchoolBlogPost = () => {
                         </div>
                       </div>
                     </div>
-                    <h3 className="font-medium text-gray-800 group-hover:text-amber-600 transition-colors mb-2">
+                    <h3 className="font-medium text-foreground group-hover:text-primary transition-colors mb-2">
                       {relatedPost.title}
                     </h3>
-                    <p className="text-sm text-gray-600 line-clamp-2">
+                    <p className="text-sm text-muted-foreground line-clamp-2">
                       {relatedPost.excerpt}
                     </p>
                   </div>
