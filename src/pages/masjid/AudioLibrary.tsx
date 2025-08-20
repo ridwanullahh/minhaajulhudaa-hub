@@ -1,53 +1,128 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
-import { ModernCard } from '@/components/ui/ModernCard';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { masjidDB } from '@/lib/platform-db';
 import { ModernButton } from '@/components/ui/ModernButton';
+import { ModernCard } from '@/components/ui/ModernCard';
+import { Input } from '@/components/ui/input';
+import {
+  Play,
+  Pause,
+  Download,
+  Share2,
+  Search,
+  Mic,
+  Tag,
+} from 'lucide-react';
+
+interface AudioTrack {
+  id: string;
+  title: string;
+  speaker: string;
+  category: string;
+  url: string;
+  duration: string;
+}
 
 const MasjidAudioLibrary = () => {
-  const { slug } = useParams();
+  const [tracks, setTracks] = useState<AudioTrack[]>([]);
+  const [filteredTracks, setFilteredTracks] = useState<AudioTrack[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [activeTrackId, setActiveTrackId] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    const loadTracks = async () => {
+      setIsLoading(true);
+      try {
+        const data = await masjidDB.get('audio_library');
+        setTracks(data);
+        setFilteredTracks(data);
+      } catch (error) {
+        console.error("Error loading audio library:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadTracks();
+  }, []);
+
+  useEffect(() => {
+    const results = tracks.filter(track =>
+      track.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      track.speaker.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      track.category.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredTracks(results);
+  }, [searchTerm, tracks]);
+
+  const togglePlay = (track: AudioTrack) => {
+    if (audioRef.current) {
+      if (activeTrackId === track.id && !audioRef.current.paused) {
+        audioRef.current.pause();
+        setActiveTrackId(null);
+      } else {
+        audioRef.current.src = track.url;
+        audioRef.current.play();
+        setActiveTrackId(track.id);
+      }
+    }
+  };
   
+  if (isLoading) {
+    return <div className="text-center py-20">Loading Audio Library...</div>;
+  }
+
   return (
-    <div className="min-h-screen py-20">
+    <div className="min-h-screen py-20 bg-muted/50">
+      <audio ref={audioRef} onEnded={() => setActiveTrackId(null)} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h1 className="text-4xl lg:text-6xl font-bold text-gray-800 mb-6">
-            Audio Library <span className="text-platform-primary">Page</span>
+          <h1 className="text-4xl lg:text-6xl font-bold text-foreground mb-6">
+            Islamic <span className="text-primary">Audio Library</span>
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            This is the audio library page for Masjid platform.
-            {slug && ` Current item: ${slug}`}
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Listen to lectures, sermons, and recitations from our collection.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {[1, 2, 3].map((item) => (
-            <ModernCard key={item} variant="glass" className="p-8">
-              <h3 className="text-xl font-bold text-gray-800 mb-4">
-                Audio Library Item {item}
-              </h3>
-              <p className="text-gray-600 mb-6">
-                This is a placeholder for audio library content. 
-                Real data will be loaded from the GitHub database.
-              </p>
-              <ModernButton className="w-full">
-                Learn More
-              </ModernButton>
-            </ModernCard>
-          ))}
+        <div className="mb-8 max-w-lg mx-auto">
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Search by title, speaker, or category..."
+              className="w-full pl-12 pr-4 py-3 text-lg rounded-full"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
         </div>
 
-        <div className="mt-16 text-center">
-          <ModernCard variant="gradient" padding="xl">
-            <h2 className="text-3xl font-bold text-gray-800 mb-6">
-              Coming Soon
-            </h2>
-            <p className="text-xl text-gray-700 mb-8">
-              This page is under development and will be fully functional soon.
-            </p>
-            <ModernButton size="lg">
-              Get Notified
-            </ModernButton>
-          </ModernCard>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredTracks.map((track) => (
+            <ModernCard key={track.id} variant="glass" className="p-6 flex flex-col">
+              <h3 className="text-xl font-bold text-foreground mb-2">{track.title}</h3>
+              <div className="flex items-center text-sm text-muted-foreground mb-4">
+                <Mic className="w-4 h-4 mr-2" /> {track.speaker}
+              </div>
+              <div className="flex items-center text-sm text-muted-foreground mb-6">
+                <Tag className="w-4 h-4 mr-2" /> {track.category}
+              </div>
+
+              <div className="mt-auto flex items-center justify-between">
+                <ModernButton onClick={() => togglePlay(track)} leftIcon={activeTrackId === track.id ? <Pause size={16} /> : <Play size={16} />}>
+                  {activeTrackId === track.id ? 'Pause' : 'Play'}
+                </ModernButton>
+                <div className="flex items-center space-x-2">
+                    <a href={track.url} download target="_blank" rel="noopener noreferrer">
+                        <ModernButton variant="outline" size="icon"><Download size={16} /></ModernButton>
+                    </a>
+                    <ModernButton variant="outline" size="icon"><Share2 size={16} /></ModernButton>
+                </div>
+              </div>
+            </ModernCard>
+          ))}
         </div>
       </div>
     </div>

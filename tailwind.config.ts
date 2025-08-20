@@ -59,11 +59,6 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        'platform-primary': '#552c20',
-        'platform-secondary': '#dd9d08',
-        'platform-accent': '#8B4513',
-        'platform-light': '#fff1f0',
-        'platform-cream': '#fffafa',
       },
       borderRadius: {
         lg: "var(--radius)",
