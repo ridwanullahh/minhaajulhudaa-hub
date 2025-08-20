@@ -57,33 +57,6 @@ const SchoolHome = () => {
     loadData();
   }, []);
 
-  const features = [
-    {
-      icon: <BookOpen className="w-8 h-8" />,
-      title: "Comprehensive Islamic Curriculum",
-      description: "Integrated Islamic studies with modern academic subjects for holistic education",
-      color: "from-amber-500 to-orange-500"
-    },
-    {
-      icon: <Users className="w-8 h-8" />,
-      title: "Expert Qualified Teachers",
-      description: "Dedicated educators with Islamic knowledge and modern teaching methodologies",
-      color: "from-emerald-500 to-teal-500"
-    },
-    {
-      icon: <Award className="w-8 h-8" />,
-      title: "Academic Excellence",
-      description: "Outstanding results with focus on character development and spiritual growth",
-      color: "from-blue-500 to-indigo-500"
-    },
-    {
-      icon: <Heart className="w-8 h-8" />,
-      title: "Nurturing Environment",
-      description: "Safe, caring atmosphere that promotes Islamic values and personal development",
-      color: "from-rose-500 to-pink-500"
-    }
-  ];
-
   const values = [
     { icon: <Shield className="w-6 h-6" />, title: "Islamic Values", desc: "Rooted in Quran & Sunnah" },
     { icon: <GraduationCap className="w-6 h-6" />, title: "Academic Excellence", desc: "High educational standards" },
@@ -94,25 +67,25 @@ const SchoolHome = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50">
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-900/10 via-orange-800/5 to-yellow-700/10" />
+      <section className="relative overflow-hidden bg-muted">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-primary/5 to-secondary/10" />
         
         {/* Decorative Elements */}
-        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-amber-200/30 to-orange-200/30 rounded-full blur-xl" />
-        <div className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-br from-yellow-200/30 to-amber-200/30 rounded-full blur-xl" />
+        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-secondary/30 to-primary/30 rounded-full blur-xl" />
+        <div className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-br from-primary/30 to-secondary/30 rounded-full blur-xl" />
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-center lg:text-left">
               <h1 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
-                <span className="bg-gradient-to-r from-amber-800 via-orange-700 to-yellow-600 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-primary via-primary/80 to-secondary bg-clip-text text-transparent">
                   Excellence in
                 </span>
                 <br />
-                <span className="text-gray-800">Islamic Education</span>
+                <span className="text-foreground">Islamic Education</span>
               </h1>
               
-              <p className="text-xl lg:text-2xl text-gray-700 mb-8 leading-relaxed max-w-2xl">
+              <p className="text-xl lg:text-2xl text-muted-foreground mb-8 leading-relaxed max-w-2xl">
                 Nurturing minds and souls with comprehensive Islamic education that prepares students 
                 for success in this world and the hereafter.
               </p>
@@ -121,14 +94,14 @@ const SchoolHome = () => {
                 <ModernButton 
                   size="lg" 
                   rightIcon={<ArrowRight className="w-5 h-5" />}
-                  className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90"
                 >
                   Explore Programs
                 </ModernButton>
                 <ModernButton 
                   variant="outline" 
                   size="lg"
-                  className="border-amber-600 text-amber-700 hover:bg-amber-50"
+                  className="border-primary text-primary hover:bg-primary/5"
                 >
                   Apply for Admission
                 </ModernButton>
@@ -136,7 +109,7 @@ const SchoolHome = () => {
             </div>
             
             <div className="relative">
-              <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-amber-100">
+              <div className="bg-background/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border">
                 <div className="grid grid-cols-2 gap-6">
                   {[
                     { label: "Students", value: stats.students, suffix: "+" },
@@ -145,10 +118,10 @@ const SchoolHome = () => {
                     { label: "Years", value: stats.years, suffix: "+" }
                   ].map((stat, index) => (
                     <div key={index} className="text-center">
-                      <div className="text-3xl font-bold text-amber-700 mb-1">
+                      <div className="text-3xl font-bold text-primary mb-1">
                         {stat.value}{stat.suffix}
                       </div>
-                      <div className="text-sm text-gray-600">{stat.label}</div>
+                      <div className="text-sm text-muted-foreground">{stat.label}</div>
                     </div>
                   ))}
                 </div>
@@ -158,45 +131,8 @@ const SchoolHome = () => {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-800 mb-4">
-              Why Choose <span className="text-amber-600">Minhaajulhudaa School?</span>
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Our holistic approach combines traditional Islamic values with modern educational excellence
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <ModernCard 
-                key={index} 
-                variant="glass" 
-                className="text-center group hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2"
-              >
-                <div className={`mb-6 flex justify-center transform group-hover:scale-110 transition-transform duration-300`}>
-                  <div className={`bg-gradient-to-r ${feature.color} p-4 rounded-2xl text-white shadow-lg`}>
-                    {feature.icon}
-                  </div>
-                </div>
-                
-                <h3 className="text-xl font-bold text-gray-800 mb-3">
-                  {feature.title}
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  {feature.description}
-                </p>
-              </ModernCard>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Values Section */}
-      <section className="py-20 bg-gradient-to-br from-amber-50 to-orange-50">
+      <section className="py-20 bg-muted/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-800 mb-4">Our Core Values</h2>

@@ -61,30 +61,6 @@ const TravelsHome = () => {
     loadData();
   }, []);
 
-  const services = [
-    {
-      icon: <Compass className="w-8 h-8" />,
-      title: "Hajj Packages",
-      description: "Complete Hajj pilgrimage packages with expert guidance and comfort",
-      color: "from-blue-600 to-indigo-600",
-      features: ["5-Star Hotels", "Expert Guides", "Group Support", "All Meals"]
-    },
-    {
-      icon: <Mountain className="w-8 h-8" />,
-      title: "Umrah Services",
-      description: "Year-round Umrah packages tailored to your spiritual journey",
-      color: "from-purple-600 to-violet-600",
-      features: ["Flexible Dates", "Premium Hotels", "Transportation", "Ziyarat Tours"]
-    },
-    {
-      icon: <Camera className="w-8 h-8" />,
-      title: "Islamic Heritage Tours",
-      description: "Explore the rich Islamic history and heritage around the world",
-      color: "from-emerald-600 to-teal-600",
-      features: ["Historical Sites", "Cultural Immersion", "Expert Historians", "Small Groups"]
-    }
-  ];
-
   const whyChooseUs = [
     {
       icon: <Shield className="w-6 h-6" />,
@@ -120,40 +96,40 @@ const TravelsHome = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900 text-white">
+      <section className="relative overflow-hidden bg-gradient-to-br from-primary to-primary/80 text-primary-foreground">
         <div className="absolute inset-0 bg-[url('/travel-pattern.svg')] opacity-10" />
         
         {/* Floating Elements */}
-        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-blue-400/20 to-indigo-400/20 rounded-full blur-xl animate-float" />
-        <div className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-br from-purple-400/20 to-blue-400/20 rounded-full blur-xl animate-float-delayed" />
-        <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-gradient-to-br from-indigo-400/20 to-purple-400/20 rounded-full blur-xl animate-pulse" />
+        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-secondary/20 to-primary/20 rounded-full blur-xl animate-float" />
+        <div className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full blur-xl animate-float-delayed" />
+        <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full blur-xl animate-pulse" />
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-center lg:text-left">
               <div className="flex items-center justify-center lg:justify-start mb-6">
-                <div className="p-4 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full shadow-2xl">
-                  <Plane className="w-12 h-12 text-white" />
+                <div className="p-4 bg-gradient-to-r from-secondary to-primary rounded-full shadow-2xl">
+                  <Plane className="w-12 h-12 text-primary-foreground" />
                 </div>
                 <div className="ml-4">
                   <h1 className="text-3xl lg:text-4xl font-bold">
-                    <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+                    <span className="bg-gradient-to-r from-secondary to-secondary/80 bg-clip-text text-transparent">
                       Minhaajulhudaa
                     </span>
                   </h1>
-                  <p className="text-lg text-blue-200">Travels & Tours</p>
+                  <p className="text-lg text-primary-foreground/80">Travels & Tours</p>
                 </div>
               </div>
               
               <h2 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
-                <span className="text-white">Sacred</span>
+                <span className="text-primary-foreground">Sacred</span>
                 <br />
-                <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">
                   Journeys Await
                 </span>
               </h2>
               
-              <p className="text-xl lg:text-2xl text-blue-100 mb-8 leading-relaxed">
+              <p className="text-xl lg:text-2xl text-primary-foreground/90 mb-8 leading-relaxed">
                 Your trusted partner for Hajj, Umrah, and Islamic heritage tours. 
                 Experience spiritual transformation with comfort and peace of mind.
               </p>
@@ -162,14 +138,14 @@ const TravelsHome = () => {
                 <ModernButton 
                   size="lg" 
                   rightIcon={<ArrowRight className="w-5 h-5" />}
-                  className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 shadow-xl"
+                  className="bg-secondary text-secondary-foreground hover:bg-secondary/90 shadow-xl"
                 >
                   Explore Packages
                 </ModernButton>
                 <ModernButton 
                   variant="outline" 
                   size="lg"
-                  className="border-blue-400 text-blue-400 hover:bg-blue-400/10"
+                  className="border-secondary text-secondary hover:bg-secondary/10"
                 >
                   Book Consultation
                 </ModernButton>
@@ -178,10 +154,10 @@ const TravelsHome = () => {
             
             {/* Stats Card */}
             <div className="relative">
-              <ModernCard variant="glass" className="bg-white/10 backdrop-blur-md border-blue-400/20">
+              <ModernCard variant="glass" className="bg-background/10 backdrop-blur-md border-secondary/20">
                 <div className="text-center mb-6">
-                  <h3 className="text-2xl font-bold text-blue-400 mb-2">Our Journey So Far</h3>
-                  <p className="text-blue-200 text-sm">Trusted by thousands of pilgrims</p>
+                  <h3 className="text-2xl font-bold text-secondary mb-2">Our Journey So Far</h3>
+                  <p className="text-secondary/80 text-sm">Trusted by thousands of pilgrims</p>
                 </div>
                 
                 <div className="grid grid-cols-2 gap-6">
@@ -192,10 +168,10 @@ const TravelsHome = () => {
                     { label: "Satisfaction Rate", value: `${travelStats.satisfaction}%` }
                   ].map((stat, index) => (
                     <div key={index} className="text-center">
-                      <div className="text-2xl lg:text-3xl font-bold text-white mb-1">
+                      <div className="text-2xl lg:text-3xl font-bold text-primary-foreground mb-1">
                         {stat.value}
                       </div>
-                      <div className="text-sm text-blue-200">{stat.label}</div>
+                      <div className="text-sm text-primary-foreground/80">{stat.label}</div>
                     </div>
                   ))}
                 </div>
@@ -205,61 +181,8 @@ const TravelsHome = () => {
         </div>
       </section>
 
-      {/* Services Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-800 mb-4">
-              Our <span className="text-blue-600">Services</span>
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Comprehensive travel solutions for your spiritual and cultural journeys
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-3 gap-8">
-            {services.map((service, index) => (
-              <ModernCard 
-                key={index} 
-                variant="glass" 
-                className="group hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden"
-              >
-                <div className="mb-6">
-                  <div className={`bg-gradient-to-r ${service.color} p-4 rounded-2xl text-white shadow-lg transform group-hover:scale-110 transition-transform duration-300 w-fit`}>
-                    {service.icon}
-                  </div>
-                </div>
-                
-                <h3 className="text-2xl font-bold text-gray-800 mb-3">
-                  {service.title}
-                </h3>
-                <p className="text-gray-600 mb-6 leading-relaxed">
-                  {service.description}
-                </p>
-
-                <div className="space-y-3 mb-6">
-                  {service.features.map((feature, idx) => (
-                    <div key={idx} className="flex items-center text-sm text-gray-700">
-                      <CheckCircle className="w-4 h-4 text-green-500 mr-2 flex-shrink-0" />
-                      {feature}
-                    </div>
-                  ))}
-                </div>
-
-                <ModernButton 
-                  size="sm" 
-                  className={`w-full bg-gradient-to-r ${service.color} hover:shadow-lg`}
-                >
-                  Learn More
-                </ModernButton>
-              </ModernCard>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Why Choose Us Section */}
-      <section className="py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
+      <section className="py-20 bg-muted/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-800 mb-4">Why Choose Us?</h2>
