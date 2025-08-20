@@ -16,6 +16,10 @@ import SchoolEvents from '@/pages/school/Events';
 import SchoolGallery from '@/pages/school/Gallery';
 import SchoolLibrary from '@/pages/school/Library';
 import SchoolShop from '@/pages/school/Shop';
+import SchoolProductSingle from '@/pages/school/ProductSingle';
+import SchoolCart from '@/pages/school/Cart';
+import SchoolCheckout from '@/pages/school/Checkout';
+import SchoolPortalDashboard from '@/pages/school/PortalDashboard';
 import SchoolCourses from '@/pages/school/Courses';
 import SchoolContact from '@/pages/school/Contact';
 
@@ -79,13 +83,16 @@ const PlatformRouter: React.FC<PlatformRouterProps> = ({ platform }) => {
       <Route path="/courses" element={<SchoolCourses />} />
       <Route path="/courses/:slug" element={<SchoolCourses />} />
       <Route path="/blog" element={<SchoolBlog />} />
-      <Route path="/blog/:slug" element={<SchoolBlogPost />} />
+      <Route path="/blog/:id" element={<SchoolBlogPost />} />
       <Route path="/events" element={<SchoolEvents />} />
       <Route path="/gallery" element={<SchoolGallery />} />
       <Route path="/library" element={<SchoolLibrary />} />
       <Route path="/library/:slug" element={<SchoolLibrary />} />
       <Route path="/shop" element={<SchoolShop />} />
-      <Route path="/shop/:slug" element={<SchoolShop />} />
+      <Route path="/shop/:id" element={<SchoolProductSingle />} />
+      <Route path="/cart" element={<SchoolCart />} />
+      <Route path="/checkout" element={<SchoolCheckout />} />
+      <Route path="/portal" element={<SchoolPortalDashboard />} />
       <Route path="/contact" element={<SchoolContact />} />
       <Route path="/admin/*" element={<AdminDashboard platform="school" />} />
       <Route path="*" element={<NotFound />} />

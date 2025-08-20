@@ -245,56 +245,61 @@ const SchoolShop = () => {
         {/* Products Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {filteredProducts.map((product) => (
-            <ModernCard key={product.id} variant="glass" className="overflow-hidden group hover:shadow-2xl transition-all duration-300">
-              <div className="aspect-w-16 aspect-h-12 bg-gray-100 rounded-t-xl mb-4 relative overflow-hidden">
-                <div className="w-full h-48 bg-gradient-to-br from-platform-primary/10 to-platform-secondary/10 flex items-center justify-center">
-                  <Package className="w-16 h-16 text-platform-primary/30" />
-                </div>
-              </div>
-
-              <div className="p-6">
-                <div className="flex items-center mb-2">
-                  <div className="flex items-center">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`w-4 h-4 ${
-                          i < Math.floor(product.rating)
-                            ? 'text-yellow-400 fill-current'
-                            : 'text-gray-300'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  <span className="text-sm text-gray-600 ml-2">({product.reviews})</span>
-                </div>
-
-                <h3 className="text-xl font-bold text-gray-800 mb-2">{product.name}</h3>
-                <p className="text-gray-600 mb-4 text-sm leading-relaxed">{product.description}</p>
-
-                <div className="flex items-center justify-between mb-4">
-                  <div className="text-2xl font-bold text-platform-primary">
-                    ${product.price.toFixed(2)}
-                  </div>
-                  <div className={`px-3 py-1 rounded-full text-sm ${
-                    product.inStock
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-red-100 text-red-800'
-                  }`}>
-                    {product.inStock ? 'In Stock' : 'Out of Stock'}
+            <Link to={`/school/shop/${product.id}`} key={product.id}>
+              <ModernCard variant="glass" className="overflow-hidden group hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
+                <div className="aspect-w-16 aspect-h-12 bg-gray-100 rounded-t-xl mb-4 relative overflow-hidden">
+                  <div className="w-full h-48 bg-gradient-to-br from-platform-primary/10 to-platform-secondary/10 flex items-center justify-center">
+                    <Package className="w-16 h-16 text-platform-primary/30" />
                   </div>
                 </div>
 
-                <ModernButton
-                  className="w-full"
-                  onClick={() => addToCart(product)}
-                  disabled={!product.inStock}
-                  leftIcon={<ShoppingCart className="w-4 h-4" />}
-                >
-                  Add to Cart
-                </ModernButton>
-              </div>
-            </ModernCard>
+                <div className="p-6 flex flex-col flex-grow">
+                  <div className="flex items-center mb-2">
+                    <div className="flex items-center">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`w-4 h-4 ${
+                            i < Math.floor(product.rating)
+                              ? 'text-yellow-400 fill-current'
+                              : 'text-gray-300'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-sm text-gray-600 ml-2">({product.reviews})</span>
+                  </div>
+
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">{product.name}</h3>
+                  <p className="text-gray-600 mb-4 text-sm leading-relaxed flex-grow">{product.description}</p>
+
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="text-2xl font-bold text-platform-primary">
+                      ${product.price.toFixed(2)}
+                    </div>
+                    <div className={`px-3 py-1 rounded-full text-sm ${
+                      product.inStock
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-red-100 text-red-800'
+                    }`}>
+                      {product.inStock ? 'In Stock' : 'Out of Stock'}
+                    </div>
+                  </div>
+
+                  <ModernButton
+                    className="w-full mt-auto"
+                    onClick={(e) => {
+                      e.preventDefault(); // Prevent navigation when clicking button
+                      addToCart(product);
+                    }}
+                    disabled={!product.inStock}
+                    leftIcon={<ShoppingCart className="w-4 h-4" />}
+                  >
+                    Add to Cart
+                  </ModernButton>
+                </div>
+              </ModernCard>
+            </Link>
           ))}
         </div>
       </div>
