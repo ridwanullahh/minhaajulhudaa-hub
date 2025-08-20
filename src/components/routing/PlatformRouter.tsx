@@ -21,13 +21,16 @@ import SchoolCart from '@/pages/school/Cart';
 import SchoolCheckout from '@/pages/school/Checkout';
 import SchoolPortalDashboard from '@/pages/school/PortalDashboard';
 import SchoolCourses from '@/pages/school/Courses';
+import SchoolCourseSingle from '@/pages/school/CourseSingle';
 import SchoolContact from '@/pages/school/Contact';
+import SchoolPortalRouter from '@/pages/school/PortalRouter';
 
 // Masjid Pages
 import MasjidHome from '@/pages/masjid/Home';
 import MasjidAbout from '@/pages/masjid/About';
 import MasjidPrayerTimes from '@/pages/masjid/PrayerTimes';
 import MasjidEvents from '@/pages/masjid/Events';
+import MasjidEventSingle from '@/pages/masjid/EventSingle';
 import MasjidAudioLibrary from '@/pages/masjid/AudioLibrary';
 import MasjidBlog from '@/pages/masjid/Blog';
 import MasjidBlogPost from '@/pages/masjid/BlogPost';
@@ -81,7 +84,7 @@ const PlatformRouter: React.FC<PlatformRouterProps> = ({ platform }) => {
       <Route path="/classes/:slug" element={<SchoolClassSingle />} />
       <Route path="/admissions" element={<SchoolAdmissions />} />
       <Route path="/courses" element={<SchoolCourses />} />
-      <Route path="/courses/:slug" element={<SchoolCourses />} />
+      <Route path="/courses/:id" element={<SchoolCourseSingle />} />
       <Route path="/blog" element={<SchoolBlog />} />
       <Route path="/blog/:id" element={<SchoolBlogPost />} />
       <Route path="/events" element={<SchoolEvents />} />
@@ -92,8 +95,8 @@ const PlatformRouter: React.FC<PlatformRouterProps> = ({ platform }) => {
       <Route path="/shop/:id" element={<SchoolProductSingle />} />
       <Route path="/cart" element={<SchoolCart />} />
       <Route path="/checkout" element={<SchoolCheckout />} />
-      <Route path="/portal" element={<SchoolPortalDashboard />} />
       <Route path="/contact" element={<SchoolContact />} />
+      <Route path="/portal/*" element={<SchoolPortalRouter />} />
       <Route path="/admin/*" element={<AdminDashboard platform="school" />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
@@ -105,6 +108,7 @@ const PlatformRouter: React.FC<PlatformRouterProps> = ({ platform }) => {
       <Route path="/about" element={<MasjidAbout />} />
       <Route path="/prayer-times" element={<MasjidPrayerTimes />} />
       <Route path="/events" element={<MasjidEvents />} />
+      <Route path="/events/:id" element={<MasjidEventSingle />} />
       <Route path="/audio" element={<MasjidAudioLibrary />} />
       <Route path="/audio/:slug" element={<MasjidAudioLibrary />} />
       <Route path="/blog" element={<MasjidBlog />} />
