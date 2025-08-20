@@ -75,20 +75,20 @@ const ManageCourses = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Class</TableHead>
-              <TableHead>Enrollment Date</TableHead>
+              <TableHead>Title</TableHead>
+              <TableHead>Instructor</TableHead>
+              <TableHead>Level</TableHead>
+              <TableHead>Status</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {courses.map((course) => (
               <TableRow key={course.id}>
-                <TableCell className="font-medium">{course.name}</TableCell>
-                <TableCell>{course.email}</TableCell>
-                <TableCell>{course.class}</TableCell>
-                <TableCell>{new Date(course.enrollmentDate).toLocaleDateString()}</TableCell>
+                <TableCell className="font-medium">{course.title}</TableCell>
+                <TableCell>{course.instructor}</TableCell>
+                <TableCell>{course.level}</TableCell>
+                <TableCell>{course.status}</TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>

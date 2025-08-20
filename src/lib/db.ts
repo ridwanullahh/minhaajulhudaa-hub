@@ -69,8 +69,19 @@ const sdkConfig = {
         duration: 'number',
         level: 'string',
         price: 'number',
-        status: 'string'
+        status: 'string',
+        lessons: 'array' // Array of lesson IDs
       }
+    },
+    lessons: {
+        required: ['title', 'courseId'],
+        types: {
+            title: 'string',
+            courseId: 'string',
+            content: 'string', // Could be markdown, video URL, etc.
+            videoUrl: 'string',
+            duration: 'number' // in minutes
+        }
     },
     classes: {
       required: ['name', 'level'],

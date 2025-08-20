@@ -84,16 +84,16 @@ const RootDirectory = () => {
                   </div>
                 </div>
                 
-                <h3 className="text-2xl font-bold mb-4" style={{ color: '#552c20' }}>
+                <h3 className="text-2xl font-bold text-primary-700 mb-4">
                   {platform.name}
                 </h3>
                 
-                <p className="text-gray-600 mb-6 leading-relaxed">
+                <p className="text-muted-foreground mb-6 leading-relaxed">
                   {platform.description}
                 </p>
                 
                 <ModernButton 
-                  className="w-full"
+                  className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
                   onClick={() => navigate(`/${platform.slug}`)}
                 >
                   Enter Platform

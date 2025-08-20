@@ -28,6 +28,7 @@ import ManageProducts from './school/ManageProducts';
 import ProductForm from './school/ProductForm';
 import ManageOrders from './school/ManageOrders';
 import OrderForm from './school/OrderForm';
+import LessonEditor from './school/LessonEditor';
 
 const SchoolAdminDashboard = () => {
   const managementSections = [
@@ -157,6 +158,7 @@ const SchoolAdmin = () => {
           <Route path="/shop/orders" element={<ManageOrders />} />
           <Route path="/shop/orders/new" element={<OrderForm />} />
           <Route path="/shop/orders/edit/:id" element={<OrderForm />} />
+          <Route path="/courses/edit/:courseId/lessons/:lessonId" element={<LessonEditor />} />
         </Routes>
       </div>
     </div>
