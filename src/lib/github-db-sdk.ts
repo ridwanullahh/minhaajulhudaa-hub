@@ -458,27 +458,47 @@ class UniversalSDK {
   }
 
   async init(): Promise<UniversalSDK> {
-    // Auto-create essential collections for each platform
-    const collections = [
-      'users', 'sessions', 'blog_posts', 'pages', 'media', 'settings',
-      // School specific
-      'students', 'courses', 'classes', 'programs', 'admissions', 'assignments', 'exams',
-      // Masjid specific
-      'prayer_times', 'events', 'audio_library', 'donations', 'announcements',
-      // Charity specific
-      'campaigns', 'projects', 'volunteers', 'beneficiaries', 'testimonials',
-      // Travels specific
-      'packages', 'bookings', 'reviews', 'itineraries', 'customers'
-    ];
+    console.log("Initializing database and seeding collections...");
 
-    for (const collection of collections) {
-      try {
-        await this.get(collection);
-      } catch (e) {
-        console.log(`Auto-creating collection: ${collection}`);
-      }
+    const platforms = ['school', 'masjid', 'charity', 'travels'];
+
+    // Collections that are common to most platforms
+    const commonCollections = ['blog_posts', 'pages', 'media', 'settings', 'events', 'donations'];
+
+    // Collections specific to each platform
+    const platformCollections: Record<string, string[]> = {
+      school: ['students', 'courses', 'classes', 'programs', 'admissions', 'assignments', 'exams'],
+      masjid: ['prayer_times', 'audio_library', 'announcements'],
+      charity: ['campaigns', 'projects', 'volunteers', 'beneficiaries', 'testimonials'],
+      travels: ['packages', 'bookings', 'reviews', 'itineraries', 'customers']
+    };
+
+    // A list of all collection paths that must exist
+    const allCollections: string[] = [];
+
+    // Add platform-specific collections
+    for (const platform of platforms) {
+        const collections = [...commonCollections, ...(platformCollections[platform] || [])];
+        for (const collection of collections) {
+            allCollections.push(`${platform}/${collection}`);
+        }
     }
 
+    // Also add top-level collections that are not platform-specific
+    allCollections.push('users', 'sessions');
+
+    for (const collectionPath of allCollections) {
+        try {
+            // The get method will automatically create the collection if it doesn't exist
+            await this.get(collectionPath);
+        } catch (e) {
+            // The 'get' method has its own catch block for creation,
+            // but we log an error here if it ultimately fails.
+            console.error(`Failed to ensure collection exists: ${collectionPath}`, e);
+        }
+    }
+
+    console.log("Database initialization complete.");
     return this;
   }
 

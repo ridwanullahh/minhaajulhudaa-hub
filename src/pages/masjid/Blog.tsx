@@ -1,53 +1,81 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
-import { ModernCard } from '@/components/ui/ModernCard';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { masjidDB } from '@/lib/platform-db';
 import { ModernButton } from '@/components/ui/ModernButton';
+import { ModernCard } from '@/components/ui/ModernCard';
+import { Calendar, User } from 'lucide-react';
 
 const MasjidBlog = () => {
-  const { slug } = useParams();
-  
+  const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadPosts = async () => {
+      setIsLoading(true);
+      try {
+        const data = await masjidDB.get('blog_posts');
+        setPosts(data.filter(p => p.status === 'published'));
+      } catch (error) {
+        console.error("Error loading blog posts:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadPosts();
+  }, []);
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  };
+
+  if (isLoading) {
+    return <div className="text-center py-20">Loading Blog...</div>;
+  }
+
   return (
-    <div className="min-h-screen py-20">
+    <div className="min-h-screen py-20 bg-muted/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h1 className="text-4xl lg:text-6xl font-bold text-gray-800 mb-6">
-            Blog <span className="text-platform-primary">Page</span>
+          <h1 className="text-4xl lg:text-6xl font-bold text-foreground mb-6">
+            From The <span className="text-primary">Minbar</span>
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            This is the blog page for Masjid platform.
-            {slug && ` Current item: ${slug}`}
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Insights, announcements, and reflections from our community leaders.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {[1, 2, 3].map((item) => (
-            <ModernCard key={item} variant="glass" className="p-8">
-              <h3 className="text-xl font-bold text-gray-800 mb-4">
-                Blog Item {item}
-              </h3>
-              <p className="text-gray-600 mb-6">
-                This is a placeholder for blog content. 
-                Real data will be loaded from the GitHub database.
-              </p>
-              <ModernButton className="w-full">
-                Learn More
-              </ModernButton>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {posts.map((post) => (
+            <ModernCard key={post.id} variant="glass" className="p-6 flex flex-col group">
+                <div className="flex-grow">
+                    <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
+                        {post.title}
+                    </h3>
+                    <p className="text-muted-foreground text-sm mb-4">
+                        {post.excerpt}
+                    </p>
+                </div>
+              <div className="border-t pt-4 mt-4 text-sm text-muted-foreground flex justify-between items-center">
+                <div className="flex items-center">
+                    <User className="w-4 h-4 mr-2" />
+                    <span>{post.author || 'Admin'}</span>
+                </div>
+                <div className="flex items-center">
+                    <Calendar className="w-4 h-4 mr-2" />
+                    <span>{formatDate(post.publishedAt)}</span>
+                </div>
+              </div>
+              <Link to={`/masjid/blog/${post.id}`} className="mt-4">
+                <ModernButton className="w-full">
+                  Read More
+                </ModernButton>
+              </Link>
             </ModernCard>
           ))}
-        </div>
-
-        <div className="mt-16 text-center">
-          <ModernCard variant="gradient" padding="xl">
-            <h2 className="text-3xl font-bold text-gray-800 mb-6">
-              Coming Soon
-            </h2>
-            <p className="text-xl text-gray-700 mb-8">
-              This page is under development and will be fully functional soon.
-            </p>
-            <ModernButton size="lg">
-              Get Notified
-            </ModernButton>
-          </ModernCard>
         </div>
       </div>
     </div>
