@@ -69,8 +69,56 @@ const sdkConfig = {
         duration: 'number',
         level: 'string',
         price: 'number',
-        status: 'string'
+        status: 'string',
+        lessons: 'array' // Array of lesson IDs
       }
+    },
+    lessons: {
+        required: ['title', 'courseId'],
+        types: {
+            title: 'string',
+            courseId: 'string',
+            content: 'string', // Could be markdown, video URL, etc.
+            videoUrl: 'string',
+            duration: 'number' // in minutes
+        }
+    },
+    quizzes: {
+        required: ['lessonId', 'title'],
+        types: {
+            lessonId: 'string',
+            title: 'string',
+            questions: 'array' // [{text: '...', options: ['...'], correct: 0}]
+        }
+    },
+    quiz_submissions: {
+        required: ['quizId', 'studentId', 'answers'],
+        types: {
+            quizId: 'string',
+            studentId: 'string',
+            answers: 'array',
+            score: 'number',
+            submittedAt: 'date'
+        }
+    },
+    assignments: {
+        required: ['lessonId', 'title'],
+        types: {
+            lessonId: 'string',
+            title: 'string',
+            description: 'string',
+            dueDate: 'date'
+        }
+    },
+    assignment_submissions: {
+        required: ['assignmentId', 'studentId'],
+        types: {
+            assignmentId: 'string',
+            studentId: 'string',
+            content: 'string', // or file URL
+            submittedAt: 'date',
+            grade: 'string'
+        }
     },
     classes: {
       required: ['name', 'level'],

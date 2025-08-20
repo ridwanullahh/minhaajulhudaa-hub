@@ -1,53 +1,72 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
-import { ModernCard } from '@/components/ui/ModernCard';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { schoolDB } from '@/lib/platform-db';
 import { ModernButton } from '@/components/ui/ModernButton';
+import { ModernCard } from '@/components/ui/ModernCard';
+import { BookOpen, BarChart, Clock, DollarSign } from 'lucide-react';
 
 const SchoolCourses = () => {
-  const { slug } = useParams();
-  
+  const [courses, setCourses] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadCourses = async () => {
+      setIsLoading(true);
+      try {
+        const data = await schoolDB.get('courses');
+        setCourses(data.filter(c => c.status === 'active'));
+      } catch (error) {
+        console.error("Error loading courses:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadCourses();
+  }, []);
+
+  if (isLoading) {
+    return <div className="text-center py-20">Loading Courses...</div>;
+  }
+
   return (
-    <div className="min-h-screen py-20">
+    <div className="min-h-screen py-20 bg-muted/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h1 className="text-4xl lg:text-6xl font-bold text-gray-800 mb-6">
-            Courses <span className="text-platform-primary">Page</span>
+          <h1 className="text-4xl lg:text-6xl font-bold text-foreground mb-6">
+            Our <span className="text-primary">Courses</span>
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            This is the courses page for School platform.
-            {slug && ` Current item: ${slug}`}
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Explore a wide range of courses designed to deepen your knowledge.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {[1, 2, 3].map((item) => (
-            <ModernCard key={item} variant="glass" className="p-8">
-              <h3 className="text-xl font-bold text-gray-800 mb-4">
-                Courses Item {item}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {courses.map((course) => (
+            <ModernCard key={course.id} variant="glass" className="p-6 flex flex-col group">
+               <div className="mb-4">
+                <span className="inline-block bg-primary/10 text-primary px-3 py-1 text-sm font-semibold rounded-full">
+                    {course.level || 'All Levels'}
+                </span>
+              </div>
+              <h3 className="text-xl font-bold text-foreground mb-3 flex-grow group-hover:text-primary transition-colors">
+                {course.title}
               </h3>
-              <p className="text-gray-600 mb-6">
-                This is a placeholder for courses content. 
-                Real data will be loaded from the GitHub database.
+              <p className="text-muted-foreground text-sm mb-4">
+                by {course.instructor}
               </p>
-              <ModernButton className="w-full">
-                Learn More
-              </ModernButton>
+
+              <div className="space-y-3 text-foreground text-sm mb-6 border-t pt-4">
+                <div className="flex items-center"><Clock className="w-4 h-4 mr-2"/><span>{course.duration} hours</span></div>
+                <div className="flex items-center"><DollarSign className="w-4 h-4 mr-2"/><span>${course.price}</span></div>
+              </div>
+
+              <Link to={`/school/courses/${course.id}`} className="mt-auto">
+                <ModernButton className="w-full">
+                  View Course
+                </ModernButton>
+              </Link>
             </ModernCard>
           ))}
-        </div>
-
-        <div className="mt-16 text-center">
-          <ModernCard variant="gradient" padding="xl">
-            <h2 className="text-3xl font-bold text-gray-800 mb-6">
-              Coming Soon
-            </h2>
-            <p className="text-xl text-gray-700 mb-8">
-              This page is under development and will be fully functional soon.
-            </p>
-            <ModernButton size="lg">
-              Get Notified
-            </ModernButton>
-          </ModernCard>
         </div>
       </div>
     </div>
