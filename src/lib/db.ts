@@ -120,6 +120,15 @@ const sdkConfig = {
             grade: 'string'
         }
     },
+    enrollments: {
+        required: ['studentId', 'courseId'],
+        types: {
+            studentId: 'string',
+            courseId: 'string',
+            enrolledAt: 'date',
+            progress: 'number' // e.g., percentage
+        }
+    },
     classes: {
       required: ['name', 'level'],
       types: {
