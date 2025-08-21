@@ -147,21 +147,27 @@ const PlatformFooter: React.FC = () => {
             
             {/* Social Links */}
             <div className="flex space-x-4">
-              {[
-                { icon: Facebook, href: '#', label: 'Facebook' },
-                { icon: Twitter, href: '#', label: 'Twitter' },
-                { icon: Instagram, href: '#', label: 'Instagram' },
-                { icon: Youtube, href: '#', label: 'YouTube' },
-              ].map(({ icon: Icon, href, label }) => (
-                <a
-                  key={label}
-                  href={href}
-                  className="p-2 bg-gray-800 rounded-lg hover:bg-platform-primary/20 hover:text-platform-secondary transition-all duration-300 transform hover:scale-110"
-                  aria-label={label}
-                >
-                  <Icon className="w-5 h-5" />
-                </a>
-              ))}
+              {(config.socials || []).map((social: { name: string, url: string }) => {
+                const Icon = {
+                  Facebook,
+                  Twitter,
+                  Instagram,
+                  Youtube,
+                }[social.name] || Link;
+
+                return (
+                  <a
+                    key={social.name}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 bg-gray-800 rounded-lg hover:bg-platform-primary/20 hover:text-platform-secondary transition-all duration-300 transform hover:scale-110"
+                    aria-label={social.name}
+                  >
+                    <Icon className="w-5 h-5" />
+                  </a>
+                );
+              })}
             </div>
           </div>
 
@@ -200,27 +206,32 @@ const PlatformFooter: React.FC = () => {
           <div>
             <h4 className="text-lg font-semibold mb-6 text-platform-secondary">Contact Info</h4>
             <div className="space-y-4">
-              <div className="flex items-start space-x-3">
-                <MapPin className="w-5 h-5 text-platform-secondary mt-1 flex-shrink-0" />
-                <div className="text-gray-300">
-                  <p>123 Islamic Center Street</p>
-                  <p>City, State 12345</p>
+              {config.address && (
+                <div className="flex items-start space-x-3">
+                  <MapPin className="w-5 h-5 text-platform-secondary mt-1 flex-shrink-0" />
+                  <div className="text-gray-300">
+                    {(config.address || '').split('\n').map((line: string, i: number) => <p key={i}>{line}</p>)}
+                  </div>
                 </div>
-              </div>
+              )}
               
-              <div className="flex items-center space-x-3">
-                <Phone className="w-5 h-5 text-platform-secondary flex-shrink-0" />
-                <a href="tel:+1234567890" className="text-gray-300 hover:text-platform-secondary transition-colors">
-                  +1 (234) 567-8900
-                </a>
-              </div>
+              {config.phone && (
+                <div className="flex items-center space-x-3">
+                  <Phone className="w-5 h-5 text-platform-secondary flex-shrink-0" />
+                  <a href={`tel:${config.phone}`} className="text-gray-300 hover:text-platform-secondary transition-colors">
+                    {config.phone}
+                  </a>
+                </div>
+              )}
               
-              <div className="flex items-center space-x-3">
-                <Mail className="w-5 h-5 text-platform-secondary flex-shrink-0" />
-                <a href="mailto:info@minhaajulhudaa.org" className="text-gray-300 hover:text-platform-secondary transition-colors">
-                  info@minhaajulhudaa.org
-                </a>
-              </div>
+              {config.email && (
+                <div className="flex items-center space-x-3">
+                  <Mail className="w-5 h-5 text-platform-secondary flex-shrink-0" />
+                  <a href={`mailto:${config.email}`} className="text-gray-300 hover:text-platform-secondary transition-colors">
+                    {config.email}
+                  </a>
+                </div>
+              )}
             </div>
 
             {/* Newsletter Signup */}
@@ -246,7 +257,7 @@ const PlatformFooter: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-gray-400 text-sm">
-              © {new Date().getFullYear()} Minhaajulhudaa {config.name}. All rights reserved.
+              © {new Date().getFullYear()} Minhaajulhudaa. All Rights Reserved.
             </div>
             <div className="flex space-x-6 text-sm">
               <Link to={`/${platform}/privacy`} className="text-gray-400 hover:text-platform-secondary transition-colors">
