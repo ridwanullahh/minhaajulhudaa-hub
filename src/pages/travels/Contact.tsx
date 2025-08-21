@@ -1,57 +1,46 @@
+// Same content as SchoolContact, just change the component name
 import React from 'react';
-import { useParams } from 'react-router-dom';
 import { ModernCard } from '@/components/ui/ModernCard';
 import { ModernButton } from '@/components/ui/ModernButton';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Mail, Phone, MapPin } from 'lucide-react';
+import { usePlatform } from '@/hooks/usePlatform';
 
 const TravelsContact = () => {
-  const { slug } = useParams();
-  
-  return (
-    <div className="min-h-screen py-20">
+    const { config, isLoadingSettings } = usePlatform();
+    const handleSubmit = (e) => { e.preventDefault(); alert("Message sent!"); };
+    const contactDetails = [
+      { icon: <MapPin/>, title: "Our Address", value: config.address },
+      { icon: <Phone/>, title: "Call Us", value: config.phone },
+      { icon: <Mail/>, title: "Email Us", value: config.email },
+    ];
+    return (
+    <div className="min-h-screen py-20 bg-muted/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h1 className="text-4xl lg:text-6xl font-bold text-gray-800 mb-6">
-            Contact <span className="text-platform-primary">Page</span>
-          </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            This is the contact page for Travels platform.
-            {slug && ` Current item: ${slug}`}
-          </p>
-        </div>
-
-        <div className="grid lg:grid-cols-3 gap-8">
-          {[1, 2, 3].map((item) => (
-            <ModernCard key={item} variant="glass" className="p-8">
-              <h3 className="text-xl font-bold text-gray-800 mb-4">
-                Contact Item {item}
-              </h3>
-              <p className="text-gray-600 mb-6">
-                This is a placeholder for contact content. 
-                Real data will be loaded from the GitHub database.
-              </p>
-              <ModernButton className="w-full">
-                Learn More
-              </ModernButton>
+        <div className="text-center mb-16"><h1 className="text-4xl lg:text-6xl font-bold">Contact Us</h1></div>
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <ModernCard variant="glass" className="p-8">
+                <h2 className="text-2xl font-bold mb-6">Send a Message</h2>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div><Label>Full Name</Label><Input required /></div>
+                    <div><Label>Email</Label><Input type="email" required /></div>
+                    <div><Label>Message</Label><Textarea rows={6} required /></div>
+                    <ModernButton type="submit" className="w-full" size="lg">Send</ModernButton>
+                </form>
             </ModernCard>
-          ))}
-        </div>
-
-        <div className="mt-16 text-center">
-          <ModernCard variant="gradient" padding="xl">
-            <h2 className="text-3xl font-bold text-gray-800 mb-6">
-              Coming Soon
-            </h2>
-            <p className="text-xl text-gray-700 mb-8">
-              This page is under development and will be fully functional soon.
-            </p>
-            <ModernButton size="lg">
-              Get Notified
-            </ModernButton>
-          </ModernCard>
+            <div className="space-y-8">
+                {isLoadingSettings ? <p>Loading...</p> : contactDetails.map(d => (
+                    d.value && <ModernCard key={d.title} className="p-6 flex items-center">
+                        <div className="text-primary mr-6">{React.cloneElement(d.icon, { className: "w-8 h-8" })}</div>
+                        <div><h3 className="text-xl font-semibold">{d.title}</h3><p>{d.value}</p></div>
+                    </ModernCard>
+                ))}
+            </div>
         </div>
       </div>
     </div>
   );
 };
-
 export default TravelsContact;
