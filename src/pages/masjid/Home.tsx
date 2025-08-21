@@ -29,6 +29,21 @@ const MasjidHome = () => {
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [isQuranPlaying, setIsQuranPlaying] = useState(false);
   const [currentReciter, setCurrentReciter] = useState('Sheikh Abdul Rahman Al-Sudais');
+  const [currentSurah, setCurrentSurah] = useState('Surah Al-Fatiha');
+  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    // Initialize audio element
+    const audioInstance = new Audio('https://download.quranicaudio.com/quran/abdurrahmaan_as-sudays/001.mp3');
+    audioInstance.loop = true;
+    setAudio(audioInstance);
+
+    return () => {
+      // Cleanup audio element on component unmount
+      audioInstance.pause();
+      setAudio(null);
+    };
+  }, []);
 
   useEffect(() => {
     // Load real-time data
@@ -55,33 +70,6 @@ const MasjidHome = () => {
     loadData();
   }, []);
 
-  const services = [
-    {
-      icon: <Clock className="w-8 h-8" />,
-      title: "Daily Prayers",
-      description: "Five daily prayers with congregation and spiritual guidance",
-      gradient: "from-[#dd9d08] to-[#8b4513]"
-    },
-    {
-      icon: <BookOpen className="w-8 h-8" />,
-      title: "Islamic Education",
-      description: "Quran classes, Arabic lessons, and Islamic studies for all ages",
-      gradient: "from-[#b8860b] to-[#6b3826]"
-    },
-    {
-      icon: <Users className="w-8 h-8" />,
-      title: "Community Programs",
-      description: "Events, workshops, and activities that strengthen our ummah",
-      gradient: "from-[#a0522d] to-[#552c20]"
-    },
-    {
-      icon: <Heart className="w-8 h-8" />,
-      title: "Social Services",
-      description: "Support for families, charity programs, and community outreach",
-      gradient: "from-[#cd853f] to-[#8b4513]"
-    }
-  ];
-
   const facilities = [
     { name: "Main Prayer Hall", capacity: "500 worshippers" },
     { name: "Women's Section", capacity: "200 worshippers" },
@@ -94,29 +82,29 @@ const MasjidHome = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section with Prayer Times */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#2d1810] via-[#552c20] to-[#dd9d08] text-white">
+      <section className="relative overflow-hidden bg-gradient-to-br from-primary to-primary/70 text-primary-foreground">
         <div className="absolute inset-0 bg-[url('/mosque-pattern.svg')] opacity-10" />
         
         {/* Floating Elements */}
-        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-[#dd9d08]/20 to-[#8b4513]/20 rounded-full blur-xl animate-pulse" />
-        <div className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-br from-[#a0522d]/20 to-[#dd9d08]/20 rounded-full blur-xl animate-pulse delay-1000" />
+        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-secondary/20 to-primary/20 rounded-full blur-xl animate-pulse" />
+        <div className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full blur-xl animate-pulse delay-1000" />
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="grid lg:grid-cols-3 gap-12 items-center">
             <div className="lg:col-span-2 text-center lg:text-left">
               <div className="flex items-center justify-center lg:justify-start mb-6">
-                <Mosque className="w-12 h-12 text-[#dd9d08] mr-4" />
+                <Mosque className="w-12 h-12 text-secondary mr-4" />
                 <div>
                   <h1 className="text-4xl lg:text-6xl font-bold mb-2">
-                    <span className="bg-gradient-to-r from-[#dd9d08] to-[#8b4513] bg-clip-text text-transparent">
+                    <span className="bg-gradient-to-r from-secondary to-secondary/70 bg-clip-text text-transparent">
                       Minhaajulhudaa
                     </span>
                   </h1>
-                  <p className="text-xl text-[#ddb892]">Islamic Center & Masjid</p>
+                  <p className="text-xl text-secondary/80">Islamic Center & Masjid</p>
                 </div>
               </div>
               
-              <p className="text-xl lg:text-2xl text-[#f5deb3] mb-8 leading-relaxed">
+              <p className="text-xl lg:text-2xl text-primary-foreground/90 mb-8 leading-relaxed">
                 Your spiritual home in the community. Building bridges through worship, 
                 knowledge, and service to Allah and humanity.
               </p>
@@ -124,14 +112,14 @@ const MasjidHome = () => {
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <ModernButton 
                   size="lg" 
-                  className="bg-gradient-to-r from-[#dd9d08] to-[#8b4513] hover:from-[#b8860b] hover:to-[#6b3826]"
+                  className="bg-secondary text-secondary-foreground hover:bg-secondary/90"
                 >
                   Join Our Community
                 </ModernButton>
                 <ModernButton 
                   variant="outline" 
                   size="lg"
-                  className="border-[#dd9d08] text-[#dd9d08] hover:bg-[#dd9d08]/10"
+                  className="border-secondary text-secondary hover:bg-secondary/10"
                 >
                   Donate Now
                 </ModernButton>
@@ -140,10 +128,10 @@ const MasjidHome = () => {
             
             {/* Prayer Times Card */}
             <div className="lg:col-span-1">
-              <ModernCard variant="glass" className="bg-white/10 backdrop-blur-md border-[#dd9d08]/20">
+              <ModernCard variant="glass" className="bg-background/10 backdrop-blur-md border-secondary/20">
                 <div className="text-center mb-6">
-                  <h3 className="text-2xl font-bold text-[#dd9d08] mb-2">Today's Prayer Times</h3>
-                  <p className="text-[#ddb892] text-sm">
+                  <h3 className="text-2xl font-bold text-secondary mb-2">Today's Prayer Times</h3>
+                  <p className="text-secondary/80 text-sm">
                     {new Date().toLocaleDateString('en-US', { 
                       weekday: 'long', 
                       year: 'numeric', 
@@ -166,16 +154,16 @@ const MasjidHome = () => {
                       key={index} 
                       className={`flex justify-between items-center p-3 rounded-lg ${
                         prayer.next 
-                          ? 'bg-[#dd9d08]/20 border border-[#dd9d08]/30' 
+                          ? 'bg-secondary/20 border border-secondary/30'
                           : prayer.special 
-                          ? 'bg-[#8b4513]/20 border border-[#8b4513]/30'
-                          : 'bg-white/5'
+                          ? 'bg-primary/20 border border-primary/30'
+                          : 'bg-background/5'
                       }`}
                     >
-                      <span className="font-medium text-white">{prayer.name}</span>
+                      <span className="font-medium text-primary-foreground">{prayer.name}</span>
                       <div className="text-right">
-                        <div className="text-[#ddb892] font-mono text-sm">{prayer.time.adhan}</div>
-                        <div className="text-[#cd853f] font-mono text-xs">{prayer.time.iqamah}</div>
+                        <div className="text-primary-foreground/80 font-mono text-sm">{prayer.time.adhan}</div>
+                        <div className="text-secondary/90 font-mono text-xs">{prayer.time.iqamah}</div>
                       </div>
                     </div>
                   ))}
@@ -187,33 +175,42 @@ const MasjidHome = () => {
       </section>
 
       {/* Quran Player Section */}
-      <section className="py-16 bg-gradient-to-r from-[#fffafa] to-[#f5deb3]">
+      <section className="py-16 bg-muted">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ModernCard variant="glass" className="bg-white/80 backdrop-blur-sm">
+          <ModernCard variant="glass" className="bg-background/80 backdrop-blur-sm">
             <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-[#552c20] mb-2">24/7 Quran Recitation</h3>
-              <p className="text-[#737373]">Listen to beautiful Quran recitation anytime</p>
+              <h3 className="text-2xl font-bold text-foreground mb-2">24/7 Quran Recitation</h3>
+              <p className="text-muted-foreground">Listen to beautiful Quran recitation anytime</p>
             </div>
             
             <div className="flex items-center justify-center space-x-6">
               <button
-                onClick={() => setIsQuranPlaying(!isQuranPlaying)}
-                className="w-16 h-16 bg-gradient-to-r from-[#dd9d08] to-[#8b4513] rounded-full flex items-center justify-center text-white hover:from-[#b8860b] hover:to-[#6b3826] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                onClick={() => {
+                  if (audio) {
+                    if (isQuranPlaying) {
+                      audio.pause();
+                    } else {
+                      audio.play();
+                    }
+                    setIsQuranPlaying(!isQuranPlaying);
+                  }
+                }}
+                className="w-16 h-16 bg-gradient-to-r from-secondary to-primary rounded-full flex items-center justify-center text-primary-foreground hover:from-secondary/90 hover:to-primary/90 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
               >
                 {isQuranPlaying ? <Pause className="w-8 h-8" /> : <Play className="w-8 h-8 ml-1" />}
               </button>
               
               <div className="flex-1 max-w-md">
                 <div className="text-center mb-2">
-                  <p className="font-medium text-[#552c20]">{currentReciter}</p>
-                  <p className="text-sm text-[#737373]">Surah Al-Fatiha</p>
+                  <p className="font-medium text-foreground">{currentReciter}</p>
+                  <p className="text-sm text-muted-foreground">{currentSurah}</p>
                 </div>
-                <div className="w-full bg-[#e5e5e5] rounded-full h-2">
-                  <div className="bg-gradient-to-r from-[#dd9d08] to-[#8b4513] h-2 rounded-full w-1/3"></div>
+                <div className="w-full bg-border rounded-full h-2">
+                  <div className="bg-gradient-to-r from-secondary to-primary h-2 rounded-full w-1/3"></div>
                 </div>
               </div>
               
-              <button className="w-12 h-12 bg-[#f5f5f5] rounded-full flex items-center justify-center text-[#737373] hover:bg-[#e5e5e5] transition-colors">
+              <button className="w-12 h-12 bg-muted/80 rounded-full flex items-center justify-center text-muted-foreground hover:bg-border transition-colors">
                 <SkipForward className="w-6 h-6" />
               </button>
             </div>
@@ -221,56 +218,19 @@ const MasjidHome = () => {
         </div>
       </section>
 
-      {/* Services Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-[#552c20] mb-4">
-              Our <span className="text-[#dd9d08]">Services</span>
-            </h2>
-            <p className="text-xl text-[#737373] max-w-3xl mx-auto">
-              Comprehensive Islamic services for spiritual growth and community development
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {services.map((service, index) => (
-              <ModernCard 
-                key={index} 
-                variant="glass" 
-                className="text-center group hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2"
-              >
-                <div className="mb-6 flex justify-center">
-                  <div className={`bg-gradient-to-r ${service.gradient} p-4 rounded-2xl text-white shadow-lg transform group-hover:scale-110 transition-transform duration-300`}>
-                    {service.icon}
-                  </div>
-                </div>
-                
-                <h3 className="text-xl font-bold text-[#552c20] mb-3">
-                  {service.title}
-                </h3>
-                <p className="text-[#737373] leading-relaxed">
-                  {service.description}
-                </p>
-              </ModernCard>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Facilities Section */}
-      <section className="py-20 bg-gradient-to-br from-[#fffafa] to-[#f5deb3]">
+      <section className="py-20 bg-muted/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-[#552c20] mb-4">Our Facilities</h2>
-            <p className="text-xl text-[#737373]">Modern amenities for comfortable worship and learning</p>
+            <h2 className="text-4xl font-bold text-primary-700 mb-4">Our Facilities</h2>
+            <p className="text-xl text-neutral-500">Modern amenities for comfortable worship and learning</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {facilities.map((facility, index) => (
-              <div key={index} className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-[#dd9d08]/10">
-                <h3 className="font-semibold text-[#552c20] mb-2">{facility.name}</h3>
-                <p className="text-sm text-[#dd9d08]">{facility.capacity}</p>
+              <div key={index} className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-accent-400/10">
+                <h3 className="font-semibold text-primary-700 mb-2">{facility.name}</h3>
+                <p className="text-sm text-accent-500">{facility.capacity}</p>
               </div>
             ))}
           </div>
@@ -278,18 +238,18 @@ const MasjidHome = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-[#dd9d08] via-[#8b4513] to-[#552c20]">
+      <section className="py-20 bg-gradient-to-r from-accent-500 via-primary-500 to-primary-700">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
             Join Our Spiritual Community
           </h2>
-          <p className="text-xl text-[#f5deb3] mb-8 leading-relaxed">
+          <p className="text-xl text-primary-100 mb-8 leading-relaxed">
             Experience the warmth of Islamic brotherhood and grow in faith together.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <ModernButton 
               size="lg" 
-              className="bg-white text-[#552c20] hover:bg-[#f5deb3] shadow-lg"
+              className="bg-white text-primary-700 hover:bg-primary-50 shadow-lg"
             >
               Visit Us Today
             </ModernButton>
@@ -303,6 +263,43 @@ const MasjidHome = () => {
           </div>
         </div>
       </section>
+
+      {/* Services Section */}
+      <section className="py-20 bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+                <h2 className="text-4xl font-bold text-primary-700 mb-4">Community Services</h2>
+                <p className="text-xl text-neutral-500">Serving the needs of our community and beyond.</p>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {['Matrimonial Services', 'Funeral Services', 'Counseling', 'Zakat & Sadaqa'].map(service => (
+                    <ModernCard key={service} className="p-6 text-center">
+                        <h3 className="font-semibold text-lg">{service}</h3>
+                    </ModernCard>
+                ))}
+            </div>
+        </div>
+      </section>
+
+      {/* Scholars Section */}
+       <section className="py-20 bg-muted/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+                <h2 className="text-4xl font-bold text-primary-700 mb-4">Our Scholars</h2>
+                <p className="text-xl text-neutral-500">Learn from our respected Imams and teachers.</p>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                 {[{name: 'Imam Abdullah', role: 'Head Imam'}, {name: 'Sheikh Yusuf', role: 'Fiqh Scholar'}, {name: 'Ustadha Fatima', role: 'Quran Teacher'}].map(scholar => (
+                    <ModernCard key={scholar.name} className="p-6 text-center">
+                        <div className="w-24 h-24 rounded-full bg-primary/10 mx-auto mb-4"></div>
+                        <h3 className="font-bold text-lg">{scholar.name}</h3>
+                        <p className="text-primary">{scholar.role}</p>
+                    </ModernCard>
+                ))}
+            </div>
+        </div>
+      </section>
+
     </div>
   );
 };

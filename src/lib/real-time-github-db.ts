@@ -332,6 +332,7 @@ class RealTimeGitHubDB {
   }
 
   async seedPlatformData(platform: string): Promise<void> {
+    console.log(`Checking and seeding data for ${platform}...`);
     try {
       switch (platform) {
         case 'school':
@@ -353,94 +354,117 @@ class RealTimeGitHubDB {
   }
 
   private async seedSchoolData(): Promise<void> {
-    // Seed blog posts
-    const blogPosts = await this.get('school', 'blog_posts');
-    if (blogPosts.length === 0) {
-      await this.insert('school', 'blog_posts', {
-        title: 'Welcome to Minhaajulhudaa School',
-        content: 'We are delighted to welcome you to our Islamic educational institution...',
-        excerpt: 'Discover our comprehensive Islamic education programs',
-        author: 'School Administration',
-        publishedAt: new Date().toISOString(),
-        tags: ['welcome', 'education', 'islam'],
-        featured: true
-      });
+    const now = new Date();
+    // Seed Pages
+    if ((await this.get('school', 'pages')).length === 0) {
+      console.log('Seeding school pages...');
+      await this.insert('school', 'pages', { slug: 'about', title: 'About Our School', content: 'Details about the school\'s mission, vision, and values.' });
+      await this.insert('school', 'pages', { slug: 'admissions', title: 'Admissions Process', content: 'Information on how to enroll your child.' });
     }
-
-    // Seed events
-    const events = await this.get('school', 'events');
-    if (events.length === 0) {
-      await this.insert('school', 'events', {
-        title: 'School Opening Ceremony',
-        description: 'Join us for the grand opening of Minhaajulhudaa School',
-        date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-        location: 'School Auditorium',
-        type: 'ceremony'
-      });
+    // Seed Blog Posts
+    if ((await this.get('school', 'blog_posts')).length === 0) {
+      console.log('Seeding school blog posts...');
+      await this.insert('school', 'blog_posts', { title: 'Welcome to Minhaajulhudaa School', content: 'Bismillah. We are overjoyed to welcome you...', excerpt: 'Discover our unique approach...', author: 'Admin', publishedAt: now.toISOString(), tags: ['welcome'], featured: true });
+      await this.insert('school', 'blog_posts', { title: 'The Importance of Tarbiyyah', content: 'Tarbiyyah, the Islamic concept of holistic development...', excerpt: 'Learn how we focus on character building...', author: 'Head of Islamic Studies', publishedAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000).toISOString(), tags: ['tarbiyyah'], featured: false });
+    }
+    // Seed Events
+    if ((await this.get('school', 'events')).length === 0) {
+      console.log('Seeding school events...');
+      await this.insert('school', 'events', { title: 'Annual Quran Competition', description: 'Celebrating our students\' dedication to the Book of Allah.', date: new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000).toISOString(), location: 'Main Hall' });
+    }
+    // Seed Programs
+    if ((await this.get('school', 'programs')).length === 0) {
+      console.log('Seeding school programs...');
+      await this.insert('school', 'programs', { name: 'Full-Time Hifz Program', description: 'Memorize the Quran while continuing core academic subjects.', duration: '3-5 years', ageGroup: '8+' });
+    }
+    // Seed Classes
+    if ((await this.get('school', 'classes')).length === 0) {
+      console.log('Seeding school classes...');
+      await this.insert('school', 'classes', { name: 'Grade 1', level: 'Elementary', capacity: 20, teacher: 'Mrs. Fatima' });
+    }
+    // Seed Courses
+    if ((await this.get('school', 'courses')).length === 0) {
+      console.log('Seeding school courses...');
+      await this.insert('school', 'courses', { title: 'Advanced Arabic Grammar', instructor: 'Dr. Yusuf', level: 'Advanced' });
     }
   }
 
   private async seedMasjidData(): Promise<void> {
-    // Seed prayer times
-    const prayerTimes = await this.get('masjid', 'prayer_times');
-    if (prayerTimes.length === 0) {
-      const today = new Date().toISOString().split('T')[0];
-      await this.insert('masjid', 'prayer_times', {
-        date: today,
-        fajr: { adhan: '5:30 AM', iqamah: '5:45 AM' },
-        dhuhr: { adhan: '12:45 PM', iqamah: '1:00 PM' },
-        asr: { adhan: '4:15 PM', iqamah: '4:30 PM' },
-        maghrib: { adhan: '6:30 PM', iqamah: '6:35 PM' },
-        isha: { adhan: '8:00 PM', iqamah: '8:15 PM' },
-        jumah: { adhan: '1:00 PM', iqamah: '1:15 PM' }
-      });
+    const now = new Date();
+    // Seed Prayer Times
+    if ((await this.get('masjid', 'prayer_times')).length === 0) {
+      console.log('Seeding masjid prayer times...');
+      const today = now.toISOString().split('T')[0];
+      await this.insert('masjid', 'prayer_times', { date: today, fajr: { adhan: '5:15 AM', iqamah: '5:30 AM' }, dhuhr: { adhan: '1:00 PM', iqamah: '1:15 PM' }, asr: { adhan: '4:45 PM', iqamah: '5:00 PM' }, maghrib: { adhan: '7:30 PM', iqamah: '7:35 PM' }, isha: { adhan: '9:00 PM', iqamah: '9:15 PM' }, jumah: { khutbah: '1:15 PM', iqamah: '1:45 PM' } });
     }
-
-    // Seed events
-    const events = await this.get('masjid', 'events');
-    if (events.length === 0) {
-      await this.insert('masjid', 'events', {
-        title: 'Friday Prayer',
-        description: 'Weekly Jumah prayer with khutbah',
-        date: new Date().toISOString(),
-        location: 'Main Prayer Hall',
-        type: 'prayer'
-      });
+    // Seed Events
+    if ((await this.get('masjid', 'events')).length === 0) {
+        console.log('Seeding masjid events...');
+        await this.insert('masjid', 'events', { title: 'Weekly Tafsir Circle: Surah Al-Kahf', description: 'A deep dive into the meanings and lessons of Surah Al-Kahf.', date: new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000).toISOString(), location: 'Main Prayer Hall', type: 'lecture' });
+    }
+    // Seed Audio Library
+    if ((await this.get('masjid', 'audio_library')).length === 0) {
+        console.log('Seeding masjid audio library...');
+        await this.insert('masjid', 'audio_library', { title: 'The Seeker\'s Path', speaker: 'Sheikh Hamza Yusuf', category: 'Spirituality', url: 'https://archive.org/download/some-lecture/lecture.mp3', duration: '1:15:30' });
+    }
+    // Seed Announcements
+    if ((await this.get('masjid', 'announcements')).length === 0) {
+        console.log('Seeding masjid announcements...');
+        await this.insert('masjid', 'announcements', { title: 'Jumu\'ah Reminder', content: 'The Friday sermon will be delivered by Imam Abdullah on the topic of gratitude.', date: now.toISOString(), priority: 'high' });
+    }
+    // Seed Blog Posts
+    if ((await this.get('masjid', 'blog_posts')).length === 0) {
+      console.log('Seeding masjid blog posts...');
+      await this.insert('masjid', 'blog_posts', { title: 'The Heart of the Community', content: 'The Masjid is more than a place of worship; it is the heart of our community...', excerpt: 'Discover the role of the Masjid...', author: 'Imam Abdullah', publishedAt: now.toISOString(), tags: ['community', 'masjid'], featured: true });
     }
   }
 
   private async seedCharityData(): Promise<void> {
-    // Seed campaigns
-    const campaigns = await this.get('charity', 'campaigns');
-    if (campaigns.length === 0) {
-      await this.insert('charity', 'campaigns', {
-        title: 'Clean Water Initiative',
-        description: 'Help us provide clean drinking water to communities in need',
-        goal: 10000,
-        raised: 2500,
-        currency: 'USD',
-        startDate: new Date().toISOString(),
-        endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-        category: 'water',
-        featured: true
-      });
+    const now = new Date();
+    // Seed Campaigns
+    if ((await this.get('charity', 'campaigns')).length === 0) {
+      console.log('Seeding charity campaigns...');
+      await this.insert('charity', 'campaigns', { title: 'Ramadan Food Security Program', description: 'Help us provide essential food packages to families in need this Ramadan.', goal: 25000, raised: 7500, currency: 'USD', category: 'food-security', featured: true });
+      await this.insert('charity', 'campaigns', { title: 'Orphan Sponsorship', description: 'Sponsor an orphan and provide them with education, healthcare, and a loving environment.', goal: 50000, raised: 12000, currency: 'USD', category: 'orphan-care', featured: true });
+    }
+    // Seed Projects
+    if ((await this.get('charity', 'projects')).length === 0) {
+        console.log('Seeding charity projects...');
+        await this.insert('charity', 'projects', { title: 'Clean Water Well in Somalia', description: 'Building a new well to provide clean and safe drinking water to a village of 500 people.', status: 'In Progress', location: 'Somalia' });
+    }
+    // Seed Testimonials
+    if ((await this.get('charity', 'testimonials')).length === 0) {
+        console.log('Seeding charity testimonials...');
+        await this.insert('charity', 'testimonials', { name: 'Aisha Rahman', content: 'The support I received from this foundation during a difficult time was a true blessing from Allah. I am forever grateful.', location: 'USA', featured: true });
+    }
+    // Seed Blog Posts
+    if ((await this.get('charity', 'blog_posts')).length === 0) {
+      console.log('Seeding charity blog posts...');
+      await this.insert('charity', 'blog_posts', { title: 'The Power of Sadaqah Jariyah', content: 'Sadaqah Jariyah is a continuous charity that benefits one even after death...', excerpt: 'Learn about ongoing charity...', author: 'Foundation Director', publishedAt: now.toISOString(), tags: ['sadaqah', 'charity'], featured: true });
     }
   }
 
   private async seedTravelsData(): Promise<void> {
-    // Seed packages
-    const packages = await this.get('travels', 'packages');
-    if (packages.length === 0) {
-      await this.insert('travels', 'packages', {
-        title: 'Umrah Package 2024',
-        description: 'Experience the spiritual journey of Umrah with our comprehensive package',
-        price: 2500,
-        currency: 'USD',
-        duration: '10 days',
-        includes: ['Flights', 'Hotel', 'Visa', 'Transportation'],
-        category: 'umrah',
-        featured: true
-      });
+    // Seed Packages
+    if ((await this.get('travels', 'packages')).length === 0) {
+      console.log('Seeding travels packages...');
+      await this.insert('travels', 'packages', { title: '14-Day Umrah Package - Spiritual Retreat', description: 'Embark on a transformative journey to the holy cities of Makkah and Madinah.', price: 2999, currency: 'USD', duration: '14 Days', category: 'umrah', featured: true });
+      await this.insert('travels', 'packages', { title: 'Hajj 2025: The Journey of a Lifetime', description: 'Fulfill the fifth pillar of Islam with our comprehensive Hajj package.', price: 9999, currency: 'USD', duration: '21 Days', category: 'hajj', featured: false });
+    }
+    // Seed Reviews
+    if ((await this.get('travels', 'reviews')).length === 0) {
+      console.log('Seeding travels reviews...');
+      await this.insert('travels', 'reviews', { customer: 'Yusuf Ahmed', rating: 5, comment: 'An unforgettable and spiritually uplifting experience. The guides were knowledgeable and caring.', package: '14-Day Umrah Package' });
+    }
+    // Seed Travel Guides
+    if ((await this.get('travels', 'travel_guides')).length === 0) {
+      console.log('Seeding travels guides...');
+      await this.insert('travels', 'travel_guides', { title: 'Preparing for Umrah: A Checklist', content: 'A comprehensive guide to help you prepare physically and spiritually for your journey.', author: 'Travels Team' });
+    }
+    // Seed Blog Posts
+    if ((await this.get('travels', 'blog_posts')).length === 0) {
+      console.log('Seeding travels blog posts...');
+      await this.insert('travels', 'blog_posts', { title: 'The History of the Kaaba', content: 'Explore the rich history of the holiest site in Islam...', excerpt: 'A brief look at the history of the Kaaba...', author: 'Cultural Guide', publishedAt: new Date().toISOString(), tags: ['hajj', 'history'], featured: true });
     }
   }
 }

@@ -16,17 +16,25 @@ import SchoolEvents from '@/pages/school/Events';
 import SchoolGallery from '@/pages/school/Gallery';
 import SchoolLibrary from '@/pages/school/Library';
 import SchoolShop from '@/pages/school/Shop';
+import SchoolProductSingle from '@/pages/school/ProductSingle';
+import SchoolCart from '@/pages/school/Cart';
+import SchoolCheckout from '@/pages/school/Checkout';
+import SchoolPortalDashboard from '@/pages/school/PortalDashboard';
 import SchoolCourses from '@/pages/school/Courses';
+import SchoolCourseSingle from '@/pages/school/CourseSingle';
 import SchoolContact from '@/pages/school/Contact';
+import SchoolPortalRouter from '@/pages/school/PortalRouter';
 
 // Masjid Pages
 import MasjidHome from '@/pages/masjid/Home';
 import MasjidAbout from '@/pages/masjid/About';
 import MasjidPrayerTimes from '@/pages/masjid/PrayerTimes';
 import MasjidEvents from '@/pages/masjid/Events';
+import MasjidEventSingle from '@/pages/masjid/EventSingle';
 import MasjidAudioLibrary from '@/pages/masjid/AudioLibrary';
+import MasjidQuranReader from '@/pages/masjid/Quran';
 import MasjidBlog from '@/pages/masjid/Blog';
-import MasjidBlogPost from '@/pages/masjid/BlogPost';
+import BlogPost from '@/pages/masjid/BlogPost';
 import MasjidDonations from '@/pages/masjid/Donations';
 import MasjidContact from '@/pages/masjid/Contact';
 
@@ -57,6 +65,7 @@ import TravelsContact from '@/pages/travels/Contact';
 
 // Admin Pages (will be created later)
 import AdminDashboard from '@/pages/admin/Dashboard';
+import AdminProtectedRoute from './AdminProtectedRoute';
 import NotFound from '@/pages/NotFound';
 
 interface PlatformRouterProps {
@@ -77,17 +86,20 @@ const PlatformRouter: React.FC<PlatformRouterProps> = ({ platform }) => {
       <Route path="/classes/:slug" element={<SchoolClassSingle />} />
       <Route path="/admissions" element={<SchoolAdmissions />} />
       <Route path="/courses" element={<SchoolCourses />} />
-      <Route path="/courses/:slug" element={<SchoolCourses />} />
+      <Route path="/courses/:id" element={<SchoolCourseSingle />} />
       <Route path="/blog" element={<SchoolBlog />} />
-      <Route path="/blog/:slug" element={<SchoolBlogPost />} />
+      <Route path="/blog/:id" element={<SchoolBlogPost />} />
       <Route path="/events" element={<SchoolEvents />} />
       <Route path="/gallery" element={<SchoolGallery />} />
       <Route path="/library" element={<SchoolLibrary />} />
       <Route path="/library/:slug" element={<SchoolLibrary />} />
       <Route path="/shop" element={<SchoolShop />} />
-      <Route path="/shop/:slug" element={<SchoolShop />} />
+      <Route path="/shop/:id" element={<SchoolProductSingle />} />
+      <Route path="/cart" element={<SchoolCart />} />
+      <Route path="/checkout" element={<SchoolCheckout />} />
       <Route path="/contact" element={<SchoolContact />} />
-      <Route path="/admin/*" element={<AdminDashboard platform="school" />} />
+      <Route path="/portal/*" element={<SchoolPortalRouter />} />
+      <Route path="/admin/*" element={<AdminProtectedRoute platform="school"><AdminDashboard platform="school" /></AdminProtectedRoute>} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
@@ -98,13 +110,15 @@ const PlatformRouter: React.FC<PlatformRouterProps> = ({ platform }) => {
       <Route path="/about" element={<MasjidAbout />} />
       <Route path="/prayer-times" element={<MasjidPrayerTimes />} />
       <Route path="/events" element={<MasjidEvents />} />
+      <Route path="/events/:id" element={<MasjidEventSingle />} />
       <Route path="/audio" element={<MasjidAudioLibrary />} />
       <Route path="/audio/:slug" element={<MasjidAudioLibrary />} />
+      <Route path="/quran" element={<MasjidQuranReader />} />
       <Route path="/blog" element={<MasjidBlog />} />
-      <Route path="/blog/:slug" element={<MasjidBlogPost />} />
+      <Route path="/blog/:id" element={<BlogPost />} />
       <Route path="/donations" element={<MasjidDonations />} />
       <Route path="/contact" element={<MasjidContact />} />
-      <Route path="/admin/*" element={<AdminDashboard platform="masjid" />} />
+      <Route path="/admin/*" element={<AdminProtectedRoute platform="masjid"><AdminDashboard platform="masjid" /></AdminProtectedRoute>} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
@@ -122,7 +136,7 @@ const PlatformRouter: React.FC<PlatformRouterProps> = ({ platform }) => {
       <Route path="/volunteer" element={<CharityVolunteer />} />
       <Route path="/testimonials" element={<CharityTestimonials />} />
       <Route path="/contact" element={<CharityContact />} />
-      <Route path="/admin/*" element={<AdminDashboard platform="charity" />} />
+      <Route path="/admin/*" element={<AdminProtectedRoute platform="charity"><AdminDashboard platform="charity" /></AdminProtectedRoute>} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
@@ -140,7 +154,7 @@ const PlatformRouter: React.FC<PlatformRouterProps> = ({ platform }) => {
       <Route path="/blog/:slug" element={<TravelsBlogPost />} />
       <Route path="/reviews" element={<TravelsReviews />} />
       <Route path="/contact" element={<TravelsContact />} />
-      <Route path="/admin/*" element={<AdminDashboard platform="travels" />} />
+      <Route path="/admin/*" element={<AdminProtectedRoute platform="travels"><AdminDashboard platform="travels" /></AdminProtectedRoute>} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
