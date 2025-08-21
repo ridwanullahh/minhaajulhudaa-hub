@@ -1,66 +1,43 @@
-
-import React, { useEffect } from 'react';
+import React from 'react';
+import { useLocation } from 'react-router-dom';
 import { usePlatform } from '@/hooks/usePlatform';
 import PlatformHeader from '@/components/layout/PlatformHeader';
-import PlatformNavigation from '@/components/navigation/PlatformNavigation';
+import AdminHeader from '@/components/layout/AdminHeader';
+import PortalHeader from '@/components/layout/PortalHeader';
 import PlatformFooter from '@/components/layout/PlatformFooter';
-import { initializeAllPlatforms } from '@/lib/platform-db';
 
 interface PlatformLayoutProps {
   children: React.ReactNode;
 }
 
 const PlatformLayout: React.FC<PlatformLayoutProps> = ({ children }) => {
-  const { theme, config, platform } = usePlatform();
+  const { theme } = usePlatform();
+  const location = useLocation();
 
-  // Initialize platform databases on mount
-  useEffect(() => {
-    initializeAllPlatforms().catch(console.error);
-  }, []);
+  const renderHeader = () => {
+    const path = location.pathname;
+    if (path.includes('/admin')) {
+      return <AdminHeader />;
+    }
+    if (path.includes('/portal')) {
+      return <PortalHeader />;
+    }
+    return <PlatformHeader />;
+  };
 
   return (
     <div
-      className={`min-h-screen bg-gradient-to-br ${theme.gradient}`}
+      className="min-h-screen bg-background"
       style={{
         '--platform-primary': theme.primary,
         '--platform-secondary': theme.secondary,
-        '--platform-accent': theme.accent,
       } as React.CSSProperties}
     >
-      <div className="relative">
-        {/* Platform-specific styling */}
-        <style>
-          {`
-            .platform-primary { color: ${theme.primary}; }
-            .platform-secondary { color: ${theme.secondary}; }
-            .platform-accent { color: ${theme.accent}; }
-            .bg-platform-primary { background-color: ${theme.primary}; }
-            .bg-platform-secondary { background-color: ${theme.secondary}; }
-            .bg-platform-accent { background-color: ${theme.accent}; }
-            .border-platform-primary { border-color: ${theme.primary}; }
-            .hover\\:bg-platform-primary:hover { background-color: ${theme.primary}; }
-            .hover\\:text-platform-primary:hover { color: ${theme.primary}; }
-            .hover\\:bg-platform-primary\\/10:hover { background-color: ${theme.primary}1a; }
-            .text-platform-primary { color: ${theme.primary}; }
-            .text-platform-secondary { color: ${theme.secondary}; }
-            .text-platform-accent { color: ${theme.accent}; }
-          `}
-        </style>
-
-        {/* Header */}
-        <PlatformHeader />
-
-        {/* Navigation */}
-        <PlatformNavigation />
-
-        {/* Main Content */}
+        {renderHeader()}
         <main className="min-h-screen">
           {children}
         </main>
-
-        {/* Footer */}
         <PlatformFooter />
-      </div>
     </div>
   );
 };

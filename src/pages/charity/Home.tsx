@@ -59,41 +59,6 @@ const CharityHome = () => {
     loadData();
   }, []);
 
-  const causes = [
-    {
-      icon: <Droplets className="w-8 h-8" />,
-      title: "Clean Water Projects",
-      description: "Providing access to clean, safe drinking water in underserved communities",
-      color: "from-blue-500 to-cyan-500",
-      raised: 45000,
-      target: 60000
-    },
-    {
-      icon: <GraduationCap className="w-8 h-8" />,
-      title: "Education Support",
-      description: "Funding schools, scholarships, and educational resources for children",
-      color: "from-green-500 to-emerald-500",
-      raised: 32000,
-      target: 50000
-    },
-    {
-      icon: <Utensils className="w-8 h-8" />,
-      title: "Food Security",
-      description: "Fighting hunger through food distribution and sustainable farming",
-      color: "from-orange-500 to-red-500",
-      raised: 28000,
-      target: 40000
-    },
-    {
-      icon: <HomeIcon className="w-8 h-8" />,
-      title: "Emergency Relief",
-      description: "Rapid response to natural disasters and humanitarian crises",
-      color: "from-purple-500 to-pink-500",
-      raised: 55000,
-      target: 75000
-    }
-  ];
-
   const values = [
     {
       icon: <Heart className="w-6 h-6" />,
@@ -129,31 +94,31 @@ const CharityHome = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-rose-900 via-pink-800 to-red-900 text-white">
+      <section className="relative overflow-hidden bg-gradient-to-br from-primary to-primary/80 text-primary-foreground">
         <div className="absolute inset-0 bg-[url('/charity-pattern.svg')] opacity-10" />
         
         {/* Animated Background Elements */}
-        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-rose-400/20 to-pink-400/20 rounded-full blur-xl animate-bounce" />
-        <div className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-br from-pink-400/20 to-red-400/20 rounded-full blur-xl animate-pulse" />
-        <div className="absolute top-1/2 left-1/2 w-24 h-24 bg-gradient-to-br from-red-400/20 to-rose-400/20 rounded-full blur-xl animate-ping" />
+        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-secondary/20 to-primary/20 rounded-full blur-xl animate-bounce" />
+        <div className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full blur-xl animate-pulse" />
+        <div className="absolute top-1/2 left-1/2 w-24 h-24 bg-gradient-to-br from-secondary/20 to-primary/20 rounded-full blur-xl animate-ping" />
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="text-center">
             <div className="flex items-center justify-center mb-8">
-              <div className="p-4 bg-gradient-to-r from-rose-500 to-pink-500 rounded-full shadow-2xl">
-                <Heart className="w-12 h-12 text-white" />
+              <div className="p-4 bg-gradient-to-r from-secondary to-primary rounded-full shadow-2xl">
+                <Heart className="w-12 h-12 text-primary-foreground" />
               </div>
             </div>
             
             <h1 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
-              <span className="bg-gradient-to-r from-rose-400 to-pink-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-secondary to-secondary/80 bg-clip-text text-transparent">
                 Compassion
               </span>
               <br />
-              <span className="text-white">in Action</span>
+              <span className="text-primary-foreground">in Action</span>
             </h1>
             
-            <p className="text-xl lg:text-2xl text-rose-100 mb-8 leading-relaxed max-w-4xl mx-auto">
+            <p className="text-xl lg:text-2xl text-primary-foreground/80 mb-8 leading-relaxed max-w-4xl mx-auto">
               Making a difference through charitable works and community support. 
               Together, we can transform lives and build a better world for everyone.
             </p>
@@ -162,14 +127,14 @@ const CharityHome = () => {
               <ModernButton 
                 size="lg" 
                 rightIcon={<Heart className="w-5 h-5" />}
-                className="bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 shadow-xl"
+                className="bg-secondary text-secondary-foreground hover:bg-secondary/90 shadow-xl"
               >
                 Donate Now
               </ModernButton>
               <ModernButton 
                 variant="outline" 
                 size="lg"
-                className="border-rose-400 text-rose-400 hover:bg-rose-400/10"
+                className="border-secondary text-secondary hover:bg-secondary/10"
               >
                 Become a Volunteer
               </ModernButton>
@@ -183,14 +148,14 @@ const CharityHome = () => {
                 { label: "Projects Completed", value: `${impactStats.projectsCompleted}+`, icon: <Target className="w-6 h-6" /> },
                 { label: "Active Volunteers", value: `${impactStats.volunteers}+`, icon: <HandHeart className="w-6 h-6" /> }
               ].map((stat, index) => (
-                <div key={index} className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-center border border-rose-400/20">
-                  <div className="text-rose-300 mb-2 flex justify-center">
+                <div key={index} className="bg-background/10 backdrop-blur-md rounded-2xl p-6 text-center border border-secondary/20">
+                  <div className="text-secondary/90 mb-2 flex justify-center">
                     {stat.icon}
                   </div>
-                  <div className="text-2xl lg:text-3xl font-bold text-white mb-1">
+                  <div className="text-2xl lg:text-3xl font-bold text-primary-foreground mb-1">
                     {stat.value}
                   </div>
-                  <div className="text-sm text-rose-200">{stat.label}</div>
+                  <div className="text-sm text-primary-foreground/80">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -198,71 +163,8 @@ const CharityHome = () => {
         </div>
       </section>
 
-      {/* Active Campaigns Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-800 mb-4">
-              Current <span className="text-rose-600">Campaigns</span>
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Join us in making an immediate impact on lives around the world
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {causes.map((cause, index) => (
-              <ModernCard 
-                key={index} 
-                variant="glass" 
-                className="group hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden"
-              >
-                <div className="mb-6">
-                  <div className={`bg-gradient-to-r ${cause.color} p-4 rounded-2xl text-white shadow-lg transform group-hover:scale-110 transition-transform duration-300 w-fit`}>
-                    {cause.icon}
-                  </div>
-                </div>
-                
-                <h3 className="text-xl font-bold text-gray-800 mb-3">
-                  {cause.title}
-                </h3>
-                <p className="text-gray-600 mb-6 leading-relaxed">
-                  {cause.description}
-                </p>
-
-                {/* Progress Bar */}
-                <div className="mb-4">
-                  <div className="flex justify-between text-sm mb-2">
-                    <span className="text-gray-600">Raised: {formatCurrency(cause.raised)}</span>
-                    <span className="text-gray-600">Goal: {formatCurrency(cause.target)}</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-3">
-                    <div 
-                      className={`bg-gradient-to-r ${cause.color} h-3 rounded-full transition-all duration-1000`}
-                      style={{ width: `${(cause.raised / cause.target) * 100}%` }}
-                    ></div>
-                  </div>
-                  <div className="text-center mt-2">
-                    <span className="text-sm font-medium text-gray-700">
-                      {Math.round((cause.raised / cause.target) * 100)}% Complete
-                    </span>
-                  </div>
-                </div>
-
-                <ModernButton 
-                  size="sm" 
-                  className={`w-full bg-gradient-to-r ${cause.color} hover:shadow-lg`}
-                >
-                  Donate Now
-                </ModernButton>
-              </ModernCard>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Values Section */}
-      <section className="py-20 bg-gradient-to-br from-rose-50 to-pink-50">
+      <section className="py-20 bg-muted/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-800 mb-4">Our Values</h2>
