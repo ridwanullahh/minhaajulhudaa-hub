@@ -14,7 +14,7 @@ import ManageDonations from './masjid/ManageDonations';
 import DonationForm from './masjid/DonationForm';
 import ManageAnnouncements from './masjid/ManageAnnouncements';
 import AnnouncementForm from './masjid/AnnouncementForm';
-import ManageBlogPosts from './masjid/ManageBlogPosts';
+import ManageBlogs from './masjid/ManageBlogs';
 import BlogForm from './masjid/BlogForm';
 
 
@@ -66,7 +66,7 @@ const MasjidAdmin = () => {
           <Route path="/announcements" element={<ManageAnnouncements />} />
           <Route path="/announcements/new" element={<AnnouncementForm />} />
           <Route path="/announcements/edit/:id" element={<AnnouncementForm />} />
-          <Route path="/blog" element={<ManageBlogPosts />} />
+          <Route path="/blog" element={<ManageBlogs />} />
           <Route path="/blog/new" element={<BlogForm />} />
           <Route path="/blog/edit/:id" element={<BlogForm />} />
         </Routes>
