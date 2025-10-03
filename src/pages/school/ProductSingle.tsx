@@ -1,4 +1,4 @@
-import React, 'useState', 'useEffect';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ModernCard } from '@/components/ui/ModernCard';
 import { ModernButton } from '@/components/ui/ModernButton';

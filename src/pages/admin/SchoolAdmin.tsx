@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Routes, Route } from 'react-router-dom';
 import { ModernCard } from '@/components/ui/ModernCard';
-import { ModernButton } from '@/components/ui/ModernButton';
 import { 
   Users, 
   BookOpen, 
   GraduationCap,
   Calendar,
   DollarSign,
-  TrendingUp,
   Bell,
   Settings,
   FileText,
@@ -18,14 +16,11 @@ import {
   Award,
   BarChart3,
   Plus,
-  Edit,
-  Trash2,
   Eye,
-  Download
 } from 'lucide-react';
 import { schoolDB } from '@/lib/platform-db';
 
-const SchoolAdmin = () => {
+const SchoolAdminDashboard = () => {
   const [stats, setStats] = useState({
     totalStudents: 0,
     totalStaff: 0,
@@ -34,8 +29,6 @@ const SchoolAdmin = () => {
     pendingAdmissions: 0,
     activeClasses: 0
   });
-  const [recentActivities, setRecentActivities] = useState([]);
-  const [quickActions, setQuickActions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -44,33 +37,19 @@ const SchoolAdmin = () => {
 
   const loadDashboardData = async () => {
     try {
-      // Load various data for dashboard
-      const [students, staff, courses, admissions, payments, classes] = await Promise.all([
+      const [students, courses] = await Promise.all([
         schoolDB.get('students'),
-        schoolDB.get('staff'),
         schoolDB.get('courses'),
-        schoolDB.get('admissions'),
-        schoolDB.get('payments'),
-        schoolDB.get('classes')
       ]);
 
       setStats({
         totalStudents: students.length,
-        totalStaff: staff.length,
+        totalStaff: 0,
         totalCourses: courses.length,
-        totalRevenue: payments.reduce((sum, payment) => sum + (payment.amount || 0), 0),
-        pendingAdmissions: admissions.filter(a => a.status === 'pending').length,
-        activeClasses: classes.filter(c => c.status === 'active').length
+        totalRevenue: 0,
+        pendingAdmissions: 0,
+        activeClasses: 0
       });
-
-      // Set recent activities
-      setRecentActivities([
-        { id: 1, type: 'admission', message: 'New admission application received', time: '2 hours ago' },
-        { id: 2, type: 'payment', message: 'Tuition payment processed', time: '4 hours ago' },
-        { id: 3, type: 'course', message: 'New course "Advanced Arabic" created', time: '1 day ago' },
-        { id: 4, type: 'student', message: 'Student profile updated', time: '2 days ago' }
-      ]);
-
     } catch (error) {
       console.error('Error loading dashboard data:', error);
     } finally {
@@ -84,48 +63,36 @@ const SchoolAdmin = () => {
       value: stats.totalStudents,
       icon: <Users className="w-8 h-8" />,
       color: 'bg-blue-500',
-      change: '+12%',
-      changeType: 'positive'
     },
     {
       title: 'Total Staff',
       value: stats.totalStaff,
       icon: <UserCheck className="w-8 h-8" />,
       color: 'bg-green-500',
-      change: '+5%',
-      changeType: 'positive'
     },
     {
       title: 'Active Courses',
       value: stats.totalCourses,
       icon: <BookOpen className="w-8 h-8" />,
       color: 'bg-purple-500',
-      change: '+8%',
-      changeType: 'positive'
     },
     {
       title: 'Monthly Revenue',
       value: `$${stats.totalRevenue.toLocaleString()}`,
       icon: <DollarSign className="w-8 h-8" />,
       color: 'bg-amber-500',
-      change: '+15%',
-      changeType: 'positive'
     },
     {
       title: 'Pending Admissions',
       value: stats.pendingAdmissions,
       icon: <FileText className="w-8 h-8" />,
       color: 'bg-orange-500',
-      change: '+3',
-      changeType: 'neutral'
     },
     {
       title: 'Active Classes',
       value: stats.activeClasses,
       icon: <GraduationCap className="w-8 h-8" />,
       color: 'bg-indigo-500',
-      change: '+2',
-      changeType: 'positive'
     }
   ];
 
@@ -180,37 +147,6 @@ const SchoolAdmin = () => {
         { name: 'Financial Reports', href: '/school/admin/reports/financial', icon: <BarChart3 className="w-4 h-4" /> }
       ]
     },
-import { Routes, Route } from 'react-router-dom';
-import ManageBlogPosts from './school/ManageBlogPosts';
-import BlogPostForm from './school/BlogPostForm';
-import ManageStudents from './school/ManageStudents';
-import StudentForm from './school/StudentForm';
-import ManageCourses from './school/ManageCourses';
-import CourseForm from './school/CourseForm';
-import ManageClasses from './school/ManageClasses';
-import ClassForm from './school/ClassForm';
-import ManagePrograms from './school/ManagePrograms';
-import ProgramForm from './school/ProgramForm';
-import ManageStaff from './school/ManageStaff';
-import StaffForm from './school/StaffForm';
-import ManageAdmissions from './school/ManageAdmissions';
-import AdmissionForm from './school/AdmissionForm';
-import ManagePayments from './school/ManagePayments';
-import PaymentForm from './school/PaymentForm';
-import ManageProducts from './school/ManageProducts';
-import ProductForm from './school/ProductForm';
-import ManageOrders from './school/ManageOrders';
-import OrderForm from './school/OrderForm';
-
-// ... (imports remain the same)
-
-const SchoolAdminDashboard = () => {
-  // This component will render the main dashboard view with stats and links
-  const [stats, setStats] = useState({ /* ... */ });
-  // ... other state and useEffect for dashboard data
-
-  const managementSections = [
-    // ... other sections
     {
       title: 'Blog Management',
       description: 'Create, edit, and manage all blog posts and articles',
@@ -232,18 +168,33 @@ const SchoolAdminDashboard = () => {
     }
   ];
 
+  if (isLoading) {
+    return <div className="flex items-center justify-center h-screen">Loading...</div>;
+  }
+
   return (
     <>
-      {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-foreground mb-2">School Administration</h1>
         <p className="text-muted-foreground">Manage all aspects of Minhaajulhudaa Islamic School</p>
       </div>
 
-      {/* Stats Grid and other dashboard components */}
-      {/* ... */}
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        {dashboardCards.map((card, index) => (
+          <ModernCard key={index} variant="default" className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground mb-1">{card.title}</p>
+                <p className="text-2xl font-bold">{card.value}</p>
+              </div>
+              <div className={`${card.color} text-white p-3 rounded-lg`}>
+                {card.icon}
+              </div>
+            </div>
+          </ModernCard>
+        ))}
+      </div>
 
-      {/* Management Sections */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
         {managementSections.map((section, index) => (
           <ModernCard key={index} variant="glass" className="p-6 hover:shadow-xl transition-all duration-300">
@@ -278,44 +229,6 @@ const SchoolAdmin = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Routes>
           <Route path="/" element={<SchoolAdminDashboard />} />
-          <Route path="/blog" element={<ManageBlogPosts />} />
-          <Route path="/blog/new" element={<BlogPostForm />} />
-          <Route path="/blog/edit/:id" element={<BlogPostForm />} />
-          <Route path="/students" element={<ManageStudents />} />
-          <Route path="/students/new" element={<StudentForm />} />
-          <Route path="/students/edit/:id" element={<StudentForm />} />
-
-          <Route path="/courses" element={<ManageCourses />} />
-          <Route path="/courses/new" element={<CourseForm />} />
-          <Route path="/courses/edit/:id" element={<CourseForm />} />
-
-          <Route path="/classes" element={<ManageClasses />} />
-          <Route path="/classes/new" element={<ClassForm />} />
-          <Route path="/classes/edit/:id" element={<ClassForm />} />
-
-          <Route path="/programs" element={<ManagePrograms />} />
-          <Route path="/programs/new" element={<ProgramForm />} />
-          <Route path="/programs/edit/:id" element={<ProgramForm />} />
-
-          <Route path="/staff" element={<ManageStaff />} />
-          <Route path="/staff/new" element={<StaffForm />} />
-          <Route path="/staff/edit/:id" element={<StaffForm />} />
-
-          <Route path="/admissions" element={<ManageAdmissions />} />
-          <Route path="/admissions/new" element={<AdmissionForm />} />
-          <Route path="/admissions/edit/:id" element={<AdmissionForm />} />
-
-          <Route path="/payments" element={<ManagePayments />} />
-          <Route path="/payments/new" element={<PaymentForm />} />
-          <Route path="/payments/edit/:id" element={<PaymentForm />} />
-
-          <Route path="/shop/products" element={<ManageProducts />} />
-          <Route path="/shop/products/new" element={<ProductForm />} />
-          <Route path="/shop/products/edit/:id" element={<ProductForm />} />
-
-          <Route path="/shop/orders" element={<ManageOrders />} />
-          <Route path="/shop/orders/new" element={<OrderForm />} />
-          <Route path="/shop/orders/edit/:id" element={<OrderForm />} />
         </Routes>
       </div>
     </div>
