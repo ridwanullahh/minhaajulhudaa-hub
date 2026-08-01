@@ -17,6 +17,9 @@ pnpm-debug.log*
 dist/
 build/
 .cache/
+apps/*/dist/
+apps/*/node_modules/
+apps/*/.astro/
 
 # IDE
 .vscode/
