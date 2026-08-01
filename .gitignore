@@ -53,4 +53,7 @@ skills/
 upload/
 download/
 worklog.md
-scripts/
+scripts/*
+# Keep permanent tooling scripts under scripts/tools/ in the repo
+!scripts/tools/
+!scripts/tools/**
