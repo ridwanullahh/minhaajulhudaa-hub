@@ -256,10 +256,10 @@ export const validateConfig = (): { valid: boolean; errors: string[] } => {
 if (config.app.debug && config.app.env === 'development') {
   const validation = validateConfig();
   if (!validation.valid) {
-    console.warn('⚠️ Configuration warnings:');
+    console.warn('Configuration warnings:');
     validation.errors.forEach(error => console.warn(`  - ${error}`));
   } else {
-    console.log('✅ Configuration validated successfully');
+    console.log('Configuration validated successfully');
   }
 }
 

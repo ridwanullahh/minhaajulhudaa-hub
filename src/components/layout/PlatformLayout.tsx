@@ -10,6 +10,16 @@ interface PlatformLayoutProps {
   children: React.ReactNode;
 }
 
+/**
+ * Platform layout shell.
+ *
+ * BismiLLAH Ar-Rahman Ar-Roheem.
+ *
+ * Applies the per-platform CSS class (e.g. `platform-school`) on the
+ * root div so that the `--platform-accent` CSS variable and all
+ * derived `bg-platform-accent` / `text-platform-accent` utility
+ * classes resolve to the correct color for the active platform.
+ */
 const PlatformLayout: React.FC<PlatformLayoutProps> = ({ children }) => {
   const { theme } = usePlatform();
   const location = useLocation();
@@ -26,18 +36,12 @@ const PlatformLayout: React.FC<PlatformLayoutProps> = ({ children }) => {
   };
 
   return (
-    <div
-      className="min-h-screen bg-background"
-      style={{
-        '--platform-primary': theme.primary,
-        '--platform-secondary': theme.secondary,
-      } as React.CSSProperties}
-    >
-        {renderHeader()}
-        <main className="min-h-screen">
-          {children}
-        </main>
-        <PlatformFooter />
+    <div className={`min-h-screen bg-background ${theme.platformClass}`}>
+      {renderHeader()}
+      <main className="min-h-screen">
+        {children}
+      </main>
+      <PlatformFooter />
     </div>
   );
 };
