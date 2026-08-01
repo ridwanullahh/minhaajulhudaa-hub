@@ -263,6 +263,43 @@ const MasjidHome = () => {
           </div>
         </div>
       </section>
+
+      {/* Services Section */}
+      <section className="py-20 bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+                <h2 className="text-4xl font-bold text-primary-700 mb-4">Community Services</h2>
+                <p className="text-xl text-neutral-500">Serving the needs of our community and beyond.</p>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {['Matrimonial Services', 'Funeral Services', 'Counseling', 'Zakat & Sadaqa'].map(service => (
+                    <ModernCard key={service} className="p-6 text-center">
+                        <h3 className="font-semibold text-lg">{service}</h3>
+                    </ModernCard>
+                ))}
+            </div>
+        </div>
+      </section>
+
+      {/* Scholars Section */}
+       <section className="py-20 bg-muted/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+                <h2 className="text-4xl font-bold text-primary-700 mb-4">Our Scholars</h2>
+                <p className="text-xl text-neutral-500">Learn from our respected Imams and teachers.</p>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                 {[{name: 'Imam Abdullah', role: 'Head Imam'}, {name: 'Sheikh Yusuf', role: 'Fiqh Scholar'}, {name: 'Ustadha Fatima', role: 'Quran Teacher'}].map(scholar => (
+                    <ModernCard key={scholar.name} className="p-6 text-center">
+                        <div className="w-24 h-24 rounded-full bg-primary/10 mx-auto mb-4"></div>
+                        <h3 className="font-bold text-lg">{scholar.name}</h3>
+                        <p className="text-primary">{scholar.role}</p>
+                    </ModernCard>
+                ))}
+            </div>
+        </div>
+      </section>
+
     </div>
   );
 };
