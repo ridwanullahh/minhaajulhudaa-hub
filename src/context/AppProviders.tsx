@@ -7,25 +7,28 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { LoadingProvider } from './LoadingContext';
 import { AdminAuthProvider } from '@/hooks/useAdminAuth';
 import { AuthProvider } from '@/lib/auth';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 const queryClient = new QueryClient();
 
 export const AppProviders = ({ children }: { children: ReactNode }) => {
     return (
-        <BrowserRouter>
-            <QueryClientProvider client={queryClient}>
-                <AuthProvider>
-                    <AdminAuthProvider>
-                        <LoadingProvider>
-                            <TooltipProvider>
-                                <Toaster />
-                                <Sonner />
-                                {children}
-                            </TooltipProvider>
-                        </LoadingProvider>
-                    </AdminAuthProvider>
-                </AuthProvider>
-            </QueryClientProvider>
-        </BrowserRouter>
+        <ErrorBoundary>
+            <BrowserRouter>
+                <QueryClientProvider client={queryClient}>
+                    <AuthProvider>
+                        <AdminAuthProvider>
+                            <LoadingProvider>
+                                <TooltipProvider>
+                                    <Toaster />
+                                    <Sonner />
+                                    {children}
+                                </TooltipProvider>
+                            </LoadingProvider>
+                        </AdminAuthProvider>
+                    </AuthProvider>
+                </QueryClientProvider>
+            </BrowserRouter>
+        </ErrorBoundary>
     );
 }

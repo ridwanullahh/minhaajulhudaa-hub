@@ -59,8 +59,9 @@ import TravelsReviews from '@/pages/travels/Reviews';
 import TravelsCourses from '@/pages/travels/Courses';
 import TravelsContact from '@/pages/travels/Contact';
 
-// Admin Pages (will be created later)
+// Admin Pages
 import AdminDashboard from '@/pages/admin/Dashboard';
+import AdminProtectedRoute from '@/components/routing/AdminProtectedRoute';
 import NotFound from '@/pages/NotFound';
 
 interface PlatformRouterProps {
@@ -94,7 +95,7 @@ const PlatformRouter: React.FC<PlatformRouterProps> = ({ platform }) => {
       <Route path="/checkout" element={<SchoolCheckout />} />
       <Route path="/portal" element={<SchoolPortalDashboard />} />
       <Route path="/contact" element={<SchoolContact />} />
-      <Route path="/admin/*" element={<AdminDashboard platform="school" />} />
+      <Route path="/admin/*" element={<AdminProtectedRoute platform="school"><AdminDashboard platform="school" /></AdminProtectedRoute>} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
@@ -111,7 +112,7 @@ const PlatformRouter: React.FC<PlatformRouterProps> = ({ platform }) => {
       <Route path="/blog/:slug" element={<MasjidBlogPost />} />
       <Route path="/donations" element={<MasjidDonations />} />
       <Route path="/contact" element={<MasjidContact />} />
-      <Route path="/admin/*" element={<AdminDashboard platform="masjid" />} />
+      <Route path="/admin/*" element={<AdminProtectedRoute platform="masjid"><AdminDashboard platform="masjid" /></AdminProtectedRoute>} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
@@ -129,7 +130,7 @@ const PlatformRouter: React.FC<PlatformRouterProps> = ({ platform }) => {
       <Route path="/volunteer" element={<CharityVolunteer />} />
       <Route path="/testimonials" element={<CharityTestimonials />} />
       <Route path="/contact" element={<CharityContact />} />
-      <Route path="/admin/*" element={<AdminDashboard platform="charity" />} />
+      <Route path="/admin/*" element={<AdminProtectedRoute platform="charity"><AdminDashboard platform="charity" /></AdminProtectedRoute>} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
@@ -147,7 +148,7 @@ const PlatformRouter: React.FC<PlatformRouterProps> = ({ platform }) => {
       <Route path="/blog/:slug" element={<TravelsBlogPost />} />
       <Route path="/reviews" element={<TravelsReviews />} />
       <Route path="/contact" element={<TravelsContact />} />
-      <Route path="/admin/*" element={<AdminDashboard platform="travels" />} />
+      <Route path="/admin/*" element={<AdminProtectedRoute platform="travels"><AdminDashboard platform="travels" /></AdminProtectedRoute>} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

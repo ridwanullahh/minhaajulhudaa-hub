@@ -35,6 +35,50 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const SESSION_KEY = 'minhaajulhudaa_session';
 const SESSION_EXPIRY = config.auth.sessionExpiry * 1000;
 
+// --- Client-side rate limiting for auth attempts ---------------------------
+// Prevents brute-force login/register attempts. Server-side rate limiting
+// should also be enforced when the Astro backend lands (Task 5).
+const RATE_LIMIT_KEY = 'minhaajulhudaa_auth_attempts';
+const RATE_LIMIT_MAX_ATTEMPTS = 5;
+const RATE_LIMIT_WINDOW_MS = 5 * 60 * 1000; // 5 minutes
+
+interface RateLimitState {
+  attempts: number;
+  windowStart: number;
+}
+
+const getRateLimitState = (): RateLimitState => {
+  try {
+    const raw = localStorage.getItem(RATE_LIMIT_KEY);
+    if (!raw) return { attempts: 0, windowStart: Date.now() };
+    return JSON.parse(raw);
+  } catch {
+    return { attempts: 0, windowStart: Date.now() };
+  }
+};
+
+const recordAuthAttempt = (): void => {
+  const state = getRateLimitState();
+  const now = Date.now();
+  if (now - state.windowStart > RATE_LIMIT_WINDOW_MS) {
+    // Reset window
+    localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify({ attempts: 1, windowStart: now }));
+    return;
+  }
+  localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify({ attempts: state.attempts + 1, windowStart: state.windowStart }));
+};
+
+const clearAuthAttempts = (): void => {
+  localStorage.removeItem(RATE_LIMIT_KEY);
+};
+
+const isRateLimited = (): boolean => {
+  const state = getRateLimitState();
+  const now = Date.now();
+  if (now - state.windowStart > RATE_LIMIT_WINDOW_MS) return false;
+  return state.attempts >= RATE_LIMIT_MAX_ATTEMPTS;
+};
+
 const hashPassword = async (password: string): Promise<string> => {
   const encoder = new TextEncoder();
   const data = encoder.encode(password + config.auth.jwtSecret);
@@ -95,9 +139,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const login = async (email: string, password: string, platform: string): Promise<User> => {
+    if (isRateLimited()) {
+      throw new Error('Too many login attempts. Please try again in a few minutes.');
+    }
+    recordAuthAttempt();
     const hashedPassword = await hashPassword(password);
     const users = await db.get<User>('users');
-    
+
     const foundUser = users.find(
       (u: User) => u.email === email && u.password === hashedPassword && u.platform === platform
     );
@@ -110,10 +158,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       throw new Error('Email not verified. Please verify your email first.');
     }
 
+    clearAuthAttempts();
     const { password: _, ...userWithoutPassword } = foundUser;
     setUser(userWithoutPassword);
     saveSession(foundUser.uid);
-    
+
     return userWithoutPassword;
   };
 
