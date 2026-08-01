@@ -1,4 +1,13 @@
 interface AppConfig {
+  db: {
+    provider: 'lightbase' | 'github';
+  };
+  lightbase: {
+    baseUrl: string;
+    apiKey: string;
+    projectId: string;
+    tenant: string;
+  };
   github: {
     user: string;
     repo: string;
@@ -107,6 +116,15 @@ const getEnvNum = (key: string, defaultValue: number = 0): number => {
 };
 
 const config: AppConfig = {
+  db: {
+    provider: (getEnvVar('VITE_DB_PROVIDER', 'lightbase') as 'lightbase' | 'github'),
+  },
+  lightbase: {
+    baseUrl: getEnvVar('VITE_LIGHTBASE_BASE_URL'),
+    apiKey: getEnvVar('VITE_LIGHTBASE_API_KEY'),
+    projectId: getEnvVar('VITE_LIGHTBASE_PROJECT_ID'),
+    tenant: getEnvVar('VITE_LIGHTBASE_TENANT', 'default'),
+  },
   github: {
     user: getEnvVar('VITE_GITHUB_USER'),
     repo: getEnvVar('VITE_GITHUB_REPO'),
@@ -201,10 +219,16 @@ const config: AppConfig = {
 
 export const validateConfig = (): { valid: boolean; errors: string[] } => {
   const errors: string[] = [];
-  
-  if (!config.github.user) errors.push('VITE_GITHUB_USER is required');
-  if (!config.github.repo) errors.push('VITE_GITHUB_REPO is required');
-  if (!config.github.token) errors.push('VITE_GITHUB_TOKEN is required');
+
+  if (config.db.provider === 'lightbase') {
+    if (!config.lightbase.baseUrl) errors.push('VITE_LIGHTBASE_BASE_URL is required when DB_PROVIDER=lightbase');
+    if (!config.lightbase.apiKey) errors.push('VITE_LIGHTBASE_API_KEY is required when DB_PROVIDER=lightbase');
+    if (!config.lightbase.projectId) errors.push('VITE_LIGHTBASE_PROJECT_ID is required when DB_PROVIDER=lightbase');
+  } else {
+    if (!config.github.user) errors.push('VITE_GITHUB_USER is required when DB_PROVIDER=github');
+    if (!config.github.repo) errors.push('VITE_GITHUB_REPO is required when DB_PROVIDER=github');
+    if (!config.github.token) errors.push('VITE_GITHUB_TOKEN is required when DB_PROVIDER=github');
+  }
   
   if (config.features.payments) {
     if (!config.payment.paystack.publicKey && !config.payment.stripe.publicKey && !config.payment.flutterwave.publicKey) {
