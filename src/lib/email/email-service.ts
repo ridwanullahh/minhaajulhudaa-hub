@@ -72,7 +72,7 @@ class EmailService {
 
     try {
       if (config.app.debug) {
-        console.log('📧 Email (Debug Mode):', {
+        console.log('Email (Debug Mode):', {
           to: payload.to,
           subject: payload.subject,
           from: payload.from || this.from,

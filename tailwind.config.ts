@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -13,17 +12,17 @@ export default {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: "1.5rem",
       screens: {
-        "2xl": "1400px",
+        "2xl": "1320px",
       },
     },
     extend: {
       fontFamily: {
-        'inter': ['Inter', 'sans-serif'],
-        'crimson': ['Crimson Text', 'serif'],
-        'sans': ['Inter', 'sans-serif'],
-        'serif': ['Crimson Text', 'serif'],
+        'inter': ['Inter', 'system-ui', 'sans-serif'],
+        'amiri': ['Amiri', 'serif'],
+        'sans': ['Inter', 'system-ui', 'sans-serif'],
+        'serif': ['Amiri', 'serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -51,6 +50,24 @@ export default {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
         },
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        warning: {
+          DEFAULT: "hsl(var(--warning))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        info: {
+          DEFAULT: "hsl(var(--info))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        platform: {
+          DEFAULT: "hsl(var(--platform-accent))",
+          foreground: "hsl(var(--platform-accent-foreground))",
+          soft: "hsl(var(--platform-accent-soft))",
+          medium: "hsl(var(--platform-accent-medium))",
+        },
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
@@ -74,10 +91,15 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "fade-in": {
+          from: { opacity: "0", transform: "translateY(4px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "fade-in": "fade-in 0.3s ease-out",
       },
     },
   },

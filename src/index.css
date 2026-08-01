@@ -1,63 +1,119 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Crimson+Text:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Amiri:wght@400;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Minhaajulhudaa Hub - Cohesive Color System
+ *
+ * BismiLLAH Ar-Rahman Ar-Roheem.
+ *
+ * Design principles:
+ *   - Light, airy backgrounds (warm off-white, not pure white)
+ *   - Soft slate text (not pure black) for reduced eye strain
+ *   - A single unifying accent (warm gold) for Islamic aesthetic
+ *   - Per-platform accent colors set via --platform-accent on the
+ *     platform layout wrapper, so each platform has its own identity
+ *     while sharing the same neutral foundation
+ *   - No heavy gradients; subtle tints and borders instead
+ *   - Generous whitespace, restrained color usage
+ */
+
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 25 45% 15%; /* Brand brown */
-    --card: 0 0% 100%;
-    --card-foreground: 25 45% 15%;
+    /* Neutral foundation (warm slate) */
+    --background: 40 33% 99%;            /* warm off-white */
+    --foreground: 215 25% 18%;           /* soft deep slate */
+    --card: 0 0% 100%;                   /* pure white for cards on warm bg */
+    --card-foreground: 215 25% 18%;
     --popover: 0 0% 100%;
-    --popover-foreground: 25 45% 15%;
-    --primary: 25 45% 33%; /* Brand primary brown */
-    --primary-foreground: 35 100% 98%;
-    --secondary: 43 74% 49%; /* Brand gold */
-    --secondary-foreground: 25 45% 15%;
-    --muted: 35 100% 96%;
-    --muted-foreground: 0 0% 45%;
-    --accent: 43 74% 49%; /* Brand gold accent */
-    --accent-foreground: 25 45% 15%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 35 100% 91%;
-    --input: 35 100% 91%;
-    --ring: 25 45% 33%;
-    --radius: 0.75rem;
+    --popover-foreground: 215 25% 18%;
 
-    /* Brand color variables */
-    --brand-primary-900: 25 45% 15%;
-    --brand-primary-700: 25 45% 33%;
-    --brand-primary-500: 28 46% 54%;
-    --brand-primary-300: 36 59% 70%;
-    --brand-primary-100: 35 100% 87%;
-    --brand-accent-600: 43 74% 49%;
-    --brand-accent-500: 43 89% 38%;
-    --brand-accent-300: 51 100% 50%;
+    /* Primary = deep teal (calm, spiritual, professional) */
+    --primary: 175 42% 32%;
+    --primary-foreground: 40 33% 99%;
+
+    /* Secondary = warm sand (neutral supporting) */
+    --secondary: 40 24% 92%;
+    --secondary-foreground: 215 25% 25%;
+
+    --muted: 40 24% 95%;
+    --muted-foreground: 215 12% 45%;
+
+    /* Accent = warm gold (Islamic aesthetic, unifying) */
+    --accent: 38 85% 52%;
+    --accent-foreground: 215 25% 18%;
+
+    --destructive: 0 72% 50%;
+    --destructive-foreground: 40 33% 99%;
+
+    --success: 152 50% 38%;
+    --warning: 38 85% 48%;
+    --info: 205 70% 48%;
+
+    --border: 40 20% 90%;
+    --input: 40 20% 90%;
+    --ring: 175 42% 32%;
+
+    --radius: 0.625rem;
+
+    /* Platform accent (overridden per-platform by PlatformLayout) */
+    --platform-accent: 175 42% 32%;
+    --platform-accent-foreground: 40 33% 99%;
+    --platform-accent-soft: 175 42% 95%;
+    --platform-accent-medium: 175 42% 88%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --background: 215 28% 8%;
+    --foreground: 40 33% 92%;
+    --card: 215 28% 11%;
+    --card-foreground: 40 33% 92%;
+    --popover: 215 28% 11%;
+    --popover-foreground: 40 33% 92%;
+    --primary: 175 42% 45%;
+    --primary-foreground: 215 28% 8%;
+    --secondary: 215 20% 18%;
+    --secondary-foreground: 40 33% 92%;
+    --muted: 215 20% 16%;
+    --muted-foreground: 40 12% 65%;
+    --accent: 38 85% 58%;
+    --accent-foreground: 215 28% 8%;
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 40 33% 92%;
+    --border: 215 20% 20%;
+    --input: 215 20% 20%;
+    --ring: 175 42% 45%;
+  }
+
+  /* Per-platform accent overrides (applied on the platform layout root) */
+  .platform-school {
+    --platform-accent: 32 80% 45%;       /* amber - knowledge */
+    --platform-accent-foreground: 40 33% 99%;
+    --platform-accent-soft: 32 80% 95%;
+    --platform-accent-medium: 32 80% 88%;
+    --ring: 32 80% 45%;
+  }
+  .platform-masjid {
+    --platform-accent: 175 45% 35%;      /* teal - spiritual calm */
+    --platform-accent-foreground: 40 33% 99%;
+    --platform-accent-soft: 175 45% 95%;
+    --platform-accent-medium: 175 45% 88%;
+    --ring: 175 45% 35%;
+  }
+  .platform-charity {
+    --platform-accent: 348 58% 50%;      /* rose - compassion */
+    --platform-accent-foreground: 40 33% 99%;
+    --platform-accent-soft: 348 58% 95%;
+    --platform-accent-medium: 348 58% 90%;
+    --ring: 348 58% 50%;
+  }
+  .platform-travels {
+    --platform-accent: 235 52% 55%;      /* indigo - journey */
+    --platform-accent-foreground: 40 33% 99%;
+    --platform-accent-soft: 235 52% 95%;
+    --platform-accent-medium: 235 52% 90%;
+    --ring: 235 52% 55%;
   }
 }
 
@@ -66,25 +122,61 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-inter;
+    @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tight;
   }
 }
 
-/* Custom animations */
+/* Utility classes for the platform accent system */
+@layer utilities {
+  .bg-platform-accent {
+    background-color: hsl(var(--platform-accent));
+  }
+  .bg-platform-accent-soft {
+    background-color: hsl(var(--platform-accent-soft));
+  }
+  .bg-platform-accent-medium {
+    background-color: hsl(var(--platform-accent-medium));
+  }
+  .text-platform-accent {
+    color: hsl(var(--platform-accent));
+  }
+  .text-platform-accent-foreground {
+    color: hsl(var(--platform-accent-foreground));
+  }
+  .border-platform-accent {
+    border-color: hsl(var(--platform-accent));
+  }
+  .ring-platform-accent {
+    --tw-ring-color: hsl(var(--platform-accent));
+  }
+  .hover\:bg-platform-accent:hover {
+    background-color: hsl(var(--platform-accent));
+  }
+  .hover\:text-platform-accent:hover {
+    color: hsl(var(--platform-accent));
+  }
+}
+
+/* Subtle, professional animations */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
+  50% { transform: translateY(-12px); }
 }
-
-@keyframes float-delayed {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-15px); }
-}
-
 .animate-float {
-  animation: float 6s ease-in-out infinite;
-}
-
-.animate-float-delayed {
-  animation: float-delayed 8s ease-in-out infinite;
+  animation: float 7s ease-in-out infinite;
 }

@@ -1,88 +1,83 @@
+/**
+ * Brand tokens and per-platform theme configuration
+ *
+ * BismiLLAH Ar-Rahman Ar-Roheem.
+ *
+ * The color system uses CSS variables (see src/index.css) so that
+ * per-platform accents can be applied by adding a platform-NAME class
+ * to the layout root. This avoids the broken template-literal class
+ * names that Tailwind's JIT cannot see (the previous build constructed
+ * gradient class names by interpolating hex codes into bracket
+ * notation, which produced unparseable CSS).
+ *
+ * Platforms share:
+ *   - Neutral foundation (warm off-white background, soft slate text)
+ *   - Primary teal for global actions
+ *   - Warm gold accent for Islamic aesthetic touches
+ *
+ * Each platform has its own accent (set via .platform-<name> on the
+ * layout wrapper):
+ *   - school  : amber   (knowledge, warmth)
+ *   - masjid  : teal    (spiritual calm)
+ *   - charity : rose    (compassion)
+ *   - travels : indigo  (journey, trust)
+ */
 
-// Brand colors and design tokens
-export const BRAND_COLORS = {
-  primary: {
-    900: '#2d1810', // Darkest brown
-    800: '#441f14', // Dark brown
-    700: '#552c20', // Base brand brown
-    600: '#6b3826', // Medium brown
-    500: '#8b4513', // Lighter brown
-    400: '#a0522d', // Light brown
-    300: '#cd853f', // Sand brown
-    200: '#ddb892', // Very light brown
-    100: '#f5deb3', // Wheat
-    50: '#fffafa'   // Snow white with warm tint
-  },
-  accent: {
-    600: '#b8860b', // Dark goldenrod
-    500: '#dd9d08', // Golden yellow
-    400: '#f0b90b', // Light gold
-    300: '#ffd700', // Gold
-    200: '#ffe135', // Light yellow
-    100: '#fff8dc'  // Cornsilk
-  },
-  neutral: {
-    900: '#1a1a1a',
-    800: '#2d2d2d',
-    700: '#404040',
-    600: '#525252',
-    500: '#737373',
-    400: '#a3a3a3',
-    300: '#d4d4d4',
-    200: '#e5e5e5',
-    100: '#f5f5f5',
-    50: '#fafafa'
-  },
-  semantic: {
-    success: '#10b981',
-    warning: '#f59e0b',
-    error: '#ef4444',
-    info: '#3b82f6'
-  }
-} as const;
+export type PlatformType = 'school' | 'masjid' | 'charity' | 'travels';
 
-// Unified brand colors for all platforms with creative layout variations
-export const PLATFORM_THEMES = {
+export interface PlatformTheme {
+  /** CSS class to apply on the layout root to activate the accent */
+  platformClass: string;
+  /** Human-readable platform name */
+  name: string;
+  /** Short tagline */
+  tagline: string;
+  /** Layout style hint for page composition */
+  layoutStyle: 'academic' | 'spiritual' | 'compassionate' | 'journey';
+}
+
+export const PLATFORM_THEMES: Record<PlatformType, PlatformTheme> = {
   school: {
-    primary: BRAND_COLORS.primary[700],
-    secondary: BRAND_COLORS.accent[500],
-    accent: BRAND_COLORS.primary[600],
-    gradient: `from-[${BRAND_COLORS.primary[50]}] via-[${BRAND_COLORS.accent[100]}] to-[${BRAND_COLORS.primary[100]}]`,
-    heroGradient: `from-[${BRAND_COLORS.primary[900]}]/20 via-[${BRAND_COLORS.primary[800]}]/10 to-[${BRAND_COLORS.accent[600]}]/20`,
-    cardGradient: `from-[${BRAND_COLORS.primary[100]}]/50 to-[${BRAND_COLORS.accent[100]}]/30`,
-    textGradient: `from-[${BRAND_COLORS.primary[800]}] via-[${BRAND_COLORS.primary[700]}] to-[${BRAND_COLORS.accent[600]}]`,
-    layoutStyle: 'academic' // Academic grid layouts, structured sections
+    platformClass: 'platform-school',
+    name: 'Minhaajulhudaa Islamic School',
+    tagline: 'Authentic Islamic education with academic excellence',
+    layoutStyle: 'academic',
   },
   masjid: {
-    primary: BRAND_COLORS.primary[700],
-    secondary: BRAND_COLORS.accent[500],
-    accent: BRAND_COLORS.primary[600],
-    gradient: `from-[${BRAND_COLORS.primary[50]}] via-[${BRAND_COLORS.accent[100]}] to-[${BRAND_COLORS.primary[100]}]`,
-    heroGradient: `from-[${BRAND_COLORS.primary[900]}]/20 via-[${BRAND_COLORS.primary[800]}]/10 to-[${BRAND_COLORS.accent[600]}]/20`,
-    cardGradient: `from-[${BRAND_COLORS.primary[100]}]/50 to-[${BRAND_COLORS.accent[100]}]/30`,
-    textGradient: `from-[${BRAND_COLORS.primary[800]}] via-[${BRAND_COLORS.primary[700]}] to-[${BRAND_COLORS.accent[600]}]`,
-    layoutStyle: 'spiritual' // Circular elements, flowing layouts, prayer-focused
+    platformClass: 'platform-masjid',
+    name: 'Minhaajulhudaa Masjid',
+    tagline: 'A community anchored in worship and knowledge',
+    layoutStyle: 'spiritual',
   },
   charity: {
-    primary: BRAND_COLORS.primary[700],
-    secondary: BRAND_COLORS.accent[500],
-    accent: BRAND_COLORS.primary[600],
-    gradient: `from-[${BRAND_COLORS.primary[50]}] via-[${BRAND_COLORS.accent[100]}] to-[${BRAND_COLORS.primary[100]}]`,
-    heroGradient: `from-[${BRAND_COLORS.primary[900]}]/20 via-[${BRAND_COLORS.primary[800]}]/10 to-[${BRAND_COLORS.accent[600]}]/20`,
-    cardGradient: `from-[${BRAND_COLORS.primary[100]}]/50 to-[${BRAND_COLORS.accent[100]}]/30`,
-    textGradient: `from-[${BRAND_COLORS.primary[800]}] via-[${BRAND_COLORS.primary[700]}] to-[${BRAND_COLORS.accent[600]}]`,
-    layoutStyle: 'compassionate' // Heart-centered designs, impact-focused layouts
+    platformClass: 'platform-charity',
+    name: 'Minhaajulhudaa Charity',
+    tagline: 'Serving the Ummah with compassion and accountability',
+    layoutStyle: 'compassionate',
   },
   travels: {
-    primary: BRAND_COLORS.primary[700],
-    secondary: BRAND_COLORS.accent[500],
-    accent: BRAND_COLORS.primary[600],
-    gradient: `from-[${BRAND_COLORS.primary[50]}] via-[${BRAND_COLORS.accent[100]}] to-[${BRAND_COLORS.primary[100]}]`,
-    heroGradient: `from-[${BRAND_COLORS.primary[900]}]/20 via-[${BRAND_COLORS.primary[800]}]/10 to-[${BRAND_COLORS.accent[600]}]/20`,
-    cardGradient: `from-[${BRAND_COLORS.primary[100]}]/50 to-[${BRAND_COLORS.accent[100]}]/30`,
-    textGradient: `from-[${BRAND_COLORS.primary[800]}] via-[${BRAND_COLORS.primary[700]}] to-[${BRAND_COLORS.accent[600]}]`,
-    layoutStyle: 'journey' // Adventure-themed layouts, destination-focused designs
-  }
+    platformClass: 'platform-travels',
+    name: 'Minhaajulhudaa Travels',
+    tagline: 'Your companion for Hajj, Umrah, and spiritual journeys',
+    layoutStyle: 'journey',
+  },
+};
+
+/**
+ * Reusable gradient class strings - all static so Tailwind JIT can
+ * see and generate them. These use the CSS-variable-backed `platform`
+ * color tokens so the same class produces a different gradient on each
+ * platform.
+ */
+export const GRADIENT_CLASSES = {
+  /** Subtle platform-tinted hero background */
+  heroSubtle: 'bg-platform-accent-soft',
+  /** Platform accent solid */
+  accentSolid: 'bg-platform-accent text-platform-accent-foreground',
+  /** Soft card surface */
+  cardSurface: 'bg-card border border-border',
+  /** Muted section divider */
+  sectionMuted: 'bg-secondary text-secondary-foreground',
 } as const;
 
-export type PlatformType = keyof typeof PLATFORM_THEMES;
+export default PLATFORM_THEMES;
