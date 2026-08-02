@@ -63,6 +63,7 @@ import TravelsBlogPost from '@/pages/travels/BlogPost';
 import TravelsReviews from '@/pages/travels/Reviews';
 import TravelsCourses from '@/pages/travels/Courses';
 import TravelsContact from '@/pages/travels/Contact';
+import TravelsDynamicPricing from '@/pages/travels/DynamicPricing';
 
 // Admin Pages
 import AdminDashboard from '@/pages/admin/Dashboard';
@@ -157,6 +158,7 @@ const PlatformRouter: React.FC<PlatformRouterProps> = ({ platform }) => {
       <Route path="/blog" element={<TravelsBlog />} />
       <Route path="/blog/:slug" element={<TravelsBlogPost />} />
       <Route path="/reviews" element={<TravelsReviews />} />
+      <Route path="/pricing" element={<TravelsDynamicPricing />} />
       <Route path="/contact" element={<TravelsContact />} />
       <Route path="/admin/*" element={<AdminProtectedRoute platform="travels"><AdminDashboard platform="travels" /></AdminProtectedRoute>} />
       <Route path="*" element={<NotFound />} />
