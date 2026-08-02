@@ -1,65 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { charityDB } from '@/lib/platform-db';
 import { ModernButton } from '@/components/ui/ModernButton';
 import { ModernCard } from '@/components/ui/ModernCard';
+import { DataState } from '@/components/ui/states';
+import { useListData } from '@/hooks/useListData';
+import { toast } from 'sonner';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+} from '@/components/ui/table';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { PlusCircle, MoreHorizontal, Edit, Trash2 } from 'lucide-react';
 
 const ManageCampaigns = () => {
-  const [items, setItems] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    loadItems();
-  }, []);
-
-  const loadItems = async () => {
-    setIsLoading(true);
-    try {
-      const data = await charityDB.get('campaigns');
-      setItems(data);
-    } catch (error) {
-      console.error("Error loading campaigns:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { data: items, isLoading, error, refetch } = useListData(() => charityDB.get('campaigns'));
 
   const handleDelete = async (id: string) => {
-    if (window.confirm("Are you sure you want to delete this campaign?")) {
+    if (window.confirm('Are you sure you want to delete this record?')) {
       try {
         await charityDB.delete('campaigns', id);
-        loadItems();
+        toast.success('Record deleted successfully');
+        refetch();
       } catch (error) {
-        console.error("Error deleting campaign:", error);
-        alert("Failed to delete campaign.");
+        console.error('Error deleting:', error);
+        toast.error('Failed to delete record');
       }
     }
   };
 
-  const formatCurrency = (amount: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
-
-  if (isLoading) return <div>Loading...</div>;
-
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Manage Campaigns</h1>
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">Manage Campaigns</h1>
+          <p className="text-sm text-muted-foreground mt-1">View and manage campaigns</p>
+        </div>
         <Link to="/charity/admin/campaigns/new">
           <ModernButton leftIcon={<PlusCircle className="w-4 h-4" />}>
             New Campaign
@@ -67,44 +45,63 @@ const ManageCampaigns = () => {
         </Link>
       </div>
 
-      <ModernCard>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Title</TableHead>
-              <TableHead>Goal</TableHead>
-              <TableHead>Raised</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {items.map((item) => (
-              <TableRow key={item.id}>
-                <TableCell className="font-medium">{item.title}</TableCell>
-                <TableCell>{formatCurrency(item.goal)}</TableCell>
-                <TableCell>{formatCurrency(item.raised)}</TableCell>
-                <TableCell>{item.status}</TableCell>
-                <TableCell className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <ModernButton variant="ghost" className="h-8 w-8 p-0"><MoreHorizontal className="h-4 w-4" /></ModernButton>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => navigate(`/charity/admin/campaigns/edit/${item.id}`)}>
-                        <Edit className="mr-2 h-4 w-4" /><span>Edit</span>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem className="text-red-600" onClick={() => handleDelete(item.id)}>
-                        <Trash2 className="mr-2 h-4 w-4" /><span>Delete</span>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
+      <DataState
+        isLoading={isLoading}
+        error={error}
+        isEmpty={!isLoading && !error && items.length === 0}
+        onRetry={refetch}
+        emptyTitle="No campaigns yet"
+        emptyMessage="Create your first record to get started."
+        emptyActionLabel="New Campaign"
+        onEmptyAction={() => navigate('/charity/admin/campaigns/new')}
+      >
+        <ModernCard>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Details</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Created</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </ModernCard>
+            </TableHeader>
+            <TableBody>
+              {items.map((item: any) => (
+                <TableRow key={item.id}>
+                  <TableCell className="font-medium">
+                    {item.title || item.name || item.speaker || item.donor || item.customerName || item.organizer || item.id}
+                  </TableCell>
+                  <TableCell>{item.status || (item.publishedAt ? 'Published' : item.approved ? 'Approved' : 'Pending')}</TableCell>
+                  <TableCell>{item.createdAt ? new Date(item.createdAt).toLocaleDateString() : item.date ? new Date(item.date).toLocaleDateString() : '-'}</TableCell>
+                  <TableCell className="text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <ModernButton variant="ghost" className="h-8 w-8 p-0">
+                          <span className="sr-only">Open menu</span>
+                          <MoreHorizontal className="h-4 w-4" />
+                        </ModernButton>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => navigate(`/charity/admin/campaigns/edit/${item.id}`)}>
+                          <Edit className="mr-2 h-4 w-4" />
+                          <span>Edit</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="text-destructive"
+                          onClick={() => handleDelete(item.id)}
+                        >
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          <span>Delete</span>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </ModernCard>
+      </DataState>
     </div>
   );
 };

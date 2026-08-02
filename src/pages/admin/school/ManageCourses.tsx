@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { schoolDB } from '@/lib/platform-db';
 import { ModernButton } from '@/components/ui/ModernButton';
 import { ModernCard } from '@/components/ui/ModernCard';
+import { DataState } from '@/components/ui/states';
+import { useListData } from '@/hooks/useListData';
 import {
   Table,
   TableBody,
@@ -10,60 +12,40 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { PlusCircle, MoreHorizontal, Edit, Trash2 } from 'lucide-react';
+} from '@/components/ui/dropdown-menu';
+import { PlusCircle, MoreHorizontal, Edit, Trash2, BookOpen } from 'lucide-react';
+import { toast } from 'sonner';
 
 const ManageCourses = () => {
-  const [courses, setCourses] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    loadCourses();
-  }, []);
-
-  const loadCourses = async () => {
-    setIsLoading(true);
-    try {
-      const data = await schoolDB.get('courses');
-      setCourses(data);
-    } catch (error) {
-      console.error("Error loading courses:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { data: courses, isLoading, error, refetch } = useListData(() => schoolDB.get('courses'));
 
   const handleDelete = async (id: string) => {
-    if (window.confirm("Are you sure you want to delete this course record?")) {
+    if (window.confirm('Are you sure you want to delete this course?')) {
       try {
         await schoolDB.delete('courses', id);
-        loadCourses(); // Refresh list after deleting
+        toast.success('Course deleted successfully');
+        refetch();
       } catch (error) {
-        console.error("Error deleting course:", error);
-        alert("Failed to delete course record.");
+        console.error('Error deleting course:', error);
+        toast.error('Failed to delete course');
       }
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
-
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-foreground">Manage Courses</h1>
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">Manage Courses</h1>
+          <p className="text-sm text-muted-foreground mt-1">Create and manage school courses</p>
+        </div>
         <Link to="/school/admin/courses/new">
           <ModernButton leftIcon={<PlusCircle className="w-4 h-4" />}>
             New Course
@@ -71,52 +53,70 @@ const ManageCourses = () => {
         </Link>
       </div>
 
-      <ModernCard>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Class</TableHead>
-              <TableHead>Enrollment Date</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {courses.map((course) => (
-              <TableRow key={course.id}>
-                <TableCell className="font-medium">{course.name}</TableCell>
-                <TableCell>{course.email}</TableCell>
-                <TableCell>{course.class}</TableCell>
-                <TableCell>{new Date(course.enrollmentDate).toLocaleDateString()}</TableCell>
-                <TableCell className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <ModernButton variant="ghost" className="h-8 w-8 p-0">
-                        <span className="sr-only">Open menu</span>
-                        <MoreHorizontal className="h-4 w-4" />
-                      </ModernButton>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => navigate(`/school/admin/courses/edit/${course.id}`)}>
-                        <Edit className="mr-2 h-4 w-4" />
-                        <span>Edit</span>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        className="text-red-600"
-                        onClick={() => handleDelete(course.id)}
-                      >
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        <span>Delete</span>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
+      <DataState
+        isLoading={isLoading}
+        error={error}
+        isEmpty={!isLoading && !error && courses.length === 0}
+        onRetry={refetch}
+        emptyTitle="No courses yet"
+        emptyMessage="Create your first course to get started."
+        emptyActionLabel="New Course"
+        onEmptyAction={() => navigate('/school/admin/courses/new')}
+      >
+        <ModernCard>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Title</TableHead>
+                <TableHead>Instructor</TableHead>
+                <TableHead>Level</TableHead>
+                <TableHead>Duration</TableHead>
+                <TableHead>Price</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </ModernCard>
+            </TableHeader>
+            <TableBody>
+              {courses.map((course: any) => (
+                <TableRow key={course.id}>
+                  <TableCell className="font-medium">
+                    <div className="flex items-center gap-2">
+                      <BookOpen className="h-4 w-4 text-muted-foreground" />
+                      {course.title}
+                    </div>
+                  </TableCell>
+                  <TableCell>{course.instructor || '-'}</TableCell>
+                  <TableCell>{course.level || '-'}</TableCell>
+                  <TableCell>{course.duration ? `${course.duration}h` : '-'}</TableCell>
+                  <TableCell>{course.price ? `NGN ${course.price.toLocaleString()}` : 'Free'}</TableCell>
+                  <TableCell className="text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <ModernButton variant="ghost" className="h-8 w-8 p-0">
+                          <span className="sr-only">Open menu</span>
+                          <MoreHorizontal className="h-4 w-4" />
+                        </ModernButton>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => navigate(`/school/admin/courses/edit/${course.id}`)}>
+                          <Edit className="mr-2 h-4 w-4" />
+                          <span>Edit</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="text-destructive"
+                          onClick={() => handleDelete(course.id)}
+                        >
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          <span>Delete</span>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </ModernCard>
+      </DataState>
     </div>
   );
 };

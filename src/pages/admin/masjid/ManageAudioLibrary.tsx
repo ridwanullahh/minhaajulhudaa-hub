@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { travelsDB } from '@/lib/platform-db';
+import { masjidDB } from '@/lib/platform-db';
 import { ModernButton } from '@/components/ui/ModernButton';
 import { ModernCard } from '@/components/ui/ModernCard';
 import { DataState } from '@/components/ui/states';
@@ -14,14 +14,14 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { PlusCircle, MoreHorizontal, Edit, Trash2 } from 'lucide-react';
 
-const ManageReviews = () => {
+const ManageAudioLibrary = () => {
   const navigate = useNavigate();
-  const { data: items, isLoading, error, refetch } = useListData(() => travelsDB.get('reviews'));
+  const { data: items, isLoading, error, refetch } = useListData(() => masjidDB.get('audio_library'));
 
   const handleDelete = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this record?')) {
       try {
-        await travelsDB.delete('reviews', id);
+        await masjidDB.delete('audio_library', id);
         toast.success('Record deleted successfully');
         refetch();
       } catch (error) {
@@ -35,12 +35,12 @@ const ManageReviews = () => {
     <div>
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Manage Reviews</h1>
-          <p className="text-sm text-muted-foreground mt-1">View and manage reviews</p>
+          <h1 className="text-2xl font-bold text-foreground">Manage Audio Library</h1>
+          <p className="text-sm text-muted-foreground mt-1">View and manage audio library</p>
         </div>
-        <Link to="/travels/admin/reviews/new">
+        <Link to="/masjid/admin/audio/new">
           <ModernButton leftIcon={<PlusCircle className="w-4 h-4" />}>
-            New Review
+            New Audio
           </ModernButton>
         </Link>
       </div>
@@ -50,10 +50,10 @@ const ManageReviews = () => {
         error={error}
         isEmpty={!isLoading && !error && items.length === 0}
         onRetry={refetch}
-        emptyTitle="No reviews yet"
+        emptyTitle="No audio library yet"
         emptyMessage="Create your first record to get started."
-        emptyActionLabel="New Review"
-        onEmptyAction={() => navigate('/travels/admin/reviews/new')}
+        emptyActionLabel="New Audio"
+        onEmptyAction={() => navigate('/masjid/admin/audio/new')}
       >
         <ModernCard>
           <Table>
@@ -82,7 +82,7 @@ const ManageReviews = () => {
                         </ModernButton>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => navigate(`/travels/admin/reviews/edit/${item.id}`)}>
+                        <DropdownMenuItem onClick={() => navigate(`/masjid/admin/audio/edit/${item.id}`)}>
                           <Edit className="mr-2 h-4 w-4" />
                           <span>Edit</span>
                         </DropdownMenuItem>
@@ -106,4 +106,4 @@ const ManageReviews = () => {
   );
 };
 
-export default ManageReviews;
+export default ManageAudioLibrary;
