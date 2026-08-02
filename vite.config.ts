@@ -1,11 +1,14 @@
 import { defineConfig, loadEnv } from "vite";
-import react from "@vitejs/plugin-react-swc";
+import react from "@vitejs/plugin-react";
 import path from "path";
-import { componentTagger } from "lovable-tagger";
 
 // BismiLLAH Ar-Rahman Ar-Roheem.
 //
 // Vite config for the React frontend.
+//
+// Uses the standard @vitejs/plugin-react (not SWC) for maximum
+// portability across deployment platforms. SWC requires native
+// binaries that may not be available on all hosts.
 //
 // Security: we do NOT inline `process.env` into the client bundle. Only
 // explicitly-prefixed VITE_ vars are exposed to the client, and even
@@ -16,7 +19,30 @@ import { componentTagger } from "lovable-tagger";
 //
 // Dev proxy: /api/* is proxied to the Astro backend (port 4321) so the
 // React app can call /api/db/* and /api/auth/* as same-origin in dev.
-export default defineConfig(({ mode }) => {
+
+async function loadPlugins(mode: string) {
+  const plugins: any[] = [react()];
+
+  // lovable-tagger is a dev-only inspection tool. Load it dynamically
+  // so production builds don't fail if it's missing or broken, and so
+  // it never affects the production bundle.
+  if (mode === 'development') {
+    try {
+      const { componentTagger } = await import('lovable-tagger');
+      if (typeof componentTagger === 'function') {
+        plugins.push(componentTagger());
+      }
+    } catch {
+      // lovable-tagger not available - skip silently
+    }
+  }
+
+  return plugins;
+}
+
+export default defineConfig(async ({ mode }) => {
+  const plugins = await loadPlugins(mode);
+
   return {
     server: {
       host: "::",
@@ -28,10 +54,7 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
-    plugins: [
-      react(),
-      mode === 'development' && componentTagger(),
-    ].filter(Boolean),
+    plugins,
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),
