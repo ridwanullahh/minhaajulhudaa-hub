@@ -3,123 +3,104 @@ import { Link } from 'react-router-dom';
 import {
   BookOpen,
   Users,
-  Award,
   Calendar,
   ArrowRight,
-  Star,
   GraduationCap,
   Heart,
   Globe,
   Shield,
-  TrendingUp,
-  Clock,
   CheckCircle,
-  Play
 } from 'lucide-react';
 import { ModernButton } from '@/components/ui/ModernButton';
-import { ModernCard } from '@/components/ui/ModernCard';
 import { schoolDB } from '@/lib/platform-db';
 
-const SchoolHome = () => {
-  const [stats, setStats] = useState({
-    students: 0,
-    teachers: 0,
-    programs: 0,
-    years: 0
-  });
-  const [featuredPrograms, setFeaturedPrograms] = useState([]);
-  const [recentNews, setRecentNews] = useState([]);
+/**
+ * School Home page
+ *
+ * BismiLLAH Ar-Rahman Ar-Roheem.
+ *
+ * Uses the cohesive palette: warm off-white bg, soft slate text,
+ * per-platform amber accent (applied via .platform-school on the
+ * layout wrapper). No heavy gradients.
+ */
+const SchoolHome: React.FC = () => {
+  const [stats, setStats] = useState({ students: 0, teachers: 0, programs: 0, years: 0 });
+  const [featuredPrograms, setFeaturedPrograms] = useState<any[]>([]);
+  const [recentNews, setRecentNews] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Load real-time data
     const loadData = async () => {
       try {
         const [programs, blogPosts, students] = await Promise.all([
           schoolDB.get('programs'),
           schoolDB.get('blog_posts'),
-          schoolDB.get('students')
+          schoolDB.get('students'),
         ]);
-
         setStats({
           students: students.length,
-          teachers: 25, // This would come from staff collection
+          teachers: 25,
           programs: programs.length,
-          years: 15
+          years: 15,
         });
-
         setFeaturedPrograms(programs.slice(0, 3));
-        setRecentNews(blogPosts.filter(post => post.status === 'published').slice(0, 3));
+        setRecentNews(blogPosts.filter((post: any) => post.status === 'published').slice(0, 3));
       } catch (error) {
         console.error('Error loading school data:', error);
+      } finally {
+        setLoading(false);
       }
     };
-
     loadData();
   }, []);
 
   const values = [
-    { icon: <Shield className="w-6 h-6" />, title: "Islamic Values", desc: "Rooted in Quran & Sunnah" },
-    { icon: <GraduationCap className="w-6 h-6" />, title: "Academic Excellence", desc: "High educational standards" },
-    { icon: <Globe className="w-6 h-6" />, title: "Global Perspective", desc: "Preparing for modern world" },
-    { icon: <Heart className="w-6 h-6" />, title: "Character Building", desc: "Moral and ethical development" }
+    { icon: Shield, title: 'Islamic Values', desc: 'Rooted in Quran and Sunnah with authentic methodology' },
+    { icon: GraduationCap, title: 'Academic Excellence', desc: 'High educational standards across all programs' },
+    { icon: Globe, title: 'Global Perspective', desc: 'Preparing students for the modern world' },
+    { icon: Heart, title: 'Character Building', desc: 'Moral and ethical development alongside academics' },
   ];
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-muted">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-primary/5 to-secondary/10" />
-        
-        {/* Decorative Elements */}
-        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-secondary/30 to-primary/30 rounded-full blur-xl" />
-        <div className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-br from-primary/30 to-secondary/30 rounded-full blur-xl" />
-        
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="text-center lg:text-left">
-              <h1 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
-                <span className="bg-gradient-to-r from-primary via-primary/80 to-secondary bg-clip-text text-transparent">
-                  Excellence in
-                </span>
-                <br />
-                <span className="text-foreground">Islamic Education</span>
-              </h1>
-              
-              <p className="text-xl lg:text-2xl text-muted-foreground mb-8 leading-relaxed max-w-2xl">
-                Nurturing minds and souls with comprehensive Islamic education that prepares students 
-                for success in this world and the hereafter.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <ModernButton 
-                  size="lg" 
-                  rightIcon={<ArrowRight className="w-5 h-5" />}
-                  className="bg-primary text-primary-foreground hover:bg-primary/90"
-                >
-                  Explore Programs
-                </ModernButton>
-                <ModernButton 
-                  variant="outline" 
-                  size="lg"
-                  className="border-primary text-primary hover:bg-primary/5"
-                >
-                  Apply for Admission
-                </ModernButton>
+      {/* Hero */}
+      <section className="relative overflow-hidden border-b border-border">
+        <div className="bg-platform-accent-soft">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <p className="text-sm font-medium text-platform-accent mb-3">
+                  BismiLLAH Ar-Rahman Ar-Roheem
+                </p>
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6">
+                  Excellence in Islamic Education
+                </h1>
+                <p className="text-lg text-muted-foreground mb-8 leading-relaxed max-w-2xl">
+                  Nurturing minds and souls with comprehensive Islamic education
+                  that prepares students for success in this world and the hereafter.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <ModernButton size="lg" onClick={() => (window.location.href = '/school/programs')}>
+                    Explore Programs
+                    <ArrowRight className="h-4 w-4" />
+                  </ModernButton>
+                  <ModernButton variant="outline" size="lg" onClick={() => (window.location.href = '/school/admissions')}>
+                    Apply for Admission
+                  </ModernButton>
+                </div>
               </div>
-            </div>
-            
-            <div className="relative">
-              <div className="bg-background/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border">
+
+              <div className="rounded-xl border border-border bg-card p-6 sm:p-8">
                 <div className="grid grid-cols-2 gap-6">
                   {[
-                    { label: "Students", value: stats.students, suffix: "+" },
-                    { label: "Teachers", value: stats.teachers, suffix: "+" },
-                    { label: "Programs", value: stats.programs, suffix: "" },
-                    { label: "Years", value: stats.years, suffix: "+" }
-                  ].map((stat, index) => (
-                    <div key={index} className="text-center">
-                      <div className="text-3xl font-bold text-primary mb-1">
-                        {stat.value}{stat.suffix}
+                    { label: 'Students', value: stats.students, suffix: '+' },
+                    { label: 'Teachers', value: stats.teachers, suffix: '+' },
+                    { label: 'Programs', value: stats.programs, suffix: '' },
+                    { label: 'Years', value: stats.years, suffix: '+' },
+                  ].map((stat) => (
+                    <div key={stat.label} className="text-center">
+                      <div className="text-3xl font-bold text-platform-accent mb-1">
+                        {loading ? '-' : `${stat.value}${stat.suffix}`}
                       </div>
                       <div className="text-sm text-muted-foreground">{stat.label}</div>
                     </div>
@@ -131,50 +112,123 @@ const SchoolHome = () => {
         </div>
       </section>
 
-      {/* Values Section */}
-      <section className="py-20 bg-muted/50">
+      {/* Values */}
+      <section className="py-16 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-800 mb-4">Our Core Values</h2>
-            <p className="text-xl text-gray-600">Foundation principles that guide our educational mission</p>
+          <div className="text-center mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">Our Core Values</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Foundation principles that guide our educational mission
+            </p>
           </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {values.map((value, index) => (
-              <div key={index} className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300 border border-amber-100">
-                <div className="text-amber-600 mb-4 flex justify-center">
-                  {value.icon}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {values.map((value) => {
+              const Icon = value.icon;
+              return (
+                <div key={value.title} className="rounded-lg border border-border bg-card p-6">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-md bg-platform-accent-soft text-platform-accent mb-4">
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <h3 className="font-semibold text-foreground mb-2">{value.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{value.desc}</p>
                 </div>
-                <h3 className="font-semibold text-gray-800 mb-2">{value.title}</h3>
-                <p className="text-sm text-gray-600">{value.desc}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-amber-600 via-orange-600 to-yellow-600">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
+      {/* Featured Programs */}
+      {featuredPrograms.length > 0 && (
+        <section className="py-16 sm:py-20 bg-secondary/50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-end justify-between mb-8">
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">Featured Programs</h2>
+                <p className="text-muted-foreground">Discover our most popular educational programs</p>
+              </div>
+              <Link to="/school/programs" className="text-sm font-medium text-platform-accent hover:underline hidden sm:inline">
+                View all
+              </Link>
+            </div>
+            <div className="grid md:grid-cols-3 gap-6">
+              {featuredPrograms.map((program) => (
+                <div key={program.id} className="rounded-lg border border-border bg-card p-6 hover:border-platform-accent/40 transition-colors">
+                  <div className="flex items-center gap-2 mb-3">
+                    <BookOpen className="h-5 w-5 text-platform-accent" />
+                    <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                      {program.category || 'Program'}
+                    </span>
+                  </div>
+                  <h3 className="text-lg font-semibold text-foreground mb-2">{program.title}</h3>
+                  <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                    {program.description}
+                  </p>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-muted-foreground">{program.duration}</span>
+                    {program.fee > 0 && (
+                      <span className="font-medium text-foreground">NGN {program.fee.toLocaleString()}</span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Recent News */}
+      {recentNews.length > 0 && (
+        <section className="py-16 sm:py-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-end justify-between mb-8">
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">Latest News</h2>
+                <p className="text-muted-foreground">Stay updated with school announcements and events</p>
+              </div>
+              <Link to="/school/blog" className="text-sm font-medium text-platform-accent hover:underline hidden sm:inline">
+                Read all
+              </Link>
+            </div>
+            <div className="grid md:grid-cols-3 gap-6">
+              {recentNews.map((post) => (
+                <Link
+                  key={post.id}
+                  to={`/school/blog/${post.id}`}
+                  className="rounded-lg border border-border bg-card p-6 hover:border-platform-accent/40 transition-colors block"
+                >
+                  <div className="flex items-center gap-2 mb-3">
+                    <Calendar className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-xs text-muted-foreground">
+                      {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString() : ''}
+                    </span>
+                  </div>
+                  <h3 className="font-semibold text-foreground mb-2 line-clamp-2">{post.title}</h3>
+                  <p className="text-sm text-muted-foreground line-clamp-3">{post.excerpt || post.content}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* CTA */}
+      <section className="py-16 sm:py-20 bg-platform-accent-soft border-t border-border">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">
             Ready to Begin Your Islamic Education Journey?
           </h2>
-          <p className="text-xl text-amber-100 mb-8 leading-relaxed">
-            Join our community of learners and discover the beauty of Islamic knowledge combined with academic excellence.
+          <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
+            Join our community of learners and discover the beauty of Islamic
+            knowledge combined with academic excellence.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <ModernButton 
-              size="lg" 
-              className="bg-white text-amber-600 hover:bg-amber-50 shadow-lg"
-            >
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <ModernButton size="lg" onClick={() => (window.location.href = '/school/admissions')}>
               Start Application
+              <ArrowRight className="h-4 w-4" />
             </ModernButton>
-            <ModernButton 
-              variant="outline" 
-              size="lg"
-              className="border-white text-white hover:bg-white/10"
-            >
-              Schedule Visit
+            <ModernButton variant="outline" size="lg" onClick={() => (window.location.href = '/school/contact')}>
+              Contact Us
             </ModernButton>
           </div>
         </div>
