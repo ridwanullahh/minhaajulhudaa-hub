@@ -3,27 +3,55 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 
-// https://vitejs.dev/config/
+// BismiLLAH Ar-Rahman Ar-Roheem.
+//
+// Vite config for the React frontend.
+//
+// Security: we do NOT inline `process.env` into the client bundle. Only
+// explicitly-prefixed VITE_ vars are exposed to the client, and even
+// then only the ones we read in src/lib/config.ts. The Lightbase API
+// key (VITE_LIGHTBASE_API_KEY) is read conditionally only when
+// VITE_DB_PROVIDER=lightbase, so with provider=api (default) the key
+// is never referenced and never appears in the bundle.
+//
+// Dev proxy: /api/* is proxied to the Astro backend (port 4321) so the
+// React app can call /api/db/* and /api/auth/* as same-origin in dev.
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), '');
-  
   return {
     server: {
       host: "::",
-      port: 3000,
+      port: 8080,
+      proxy: {
+        '/api': {
+          target: 'http://localhost:4321',
+          changeOrigin: true,
+        },
+      },
     },
     plugins: [
       react(),
-      mode === 'development' &&
-      componentTagger(),
+      mode === 'development' && componentTagger(),
     ].filter(Boolean),
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),
       },
     },
+    // Only expose VITE_-prefixed env vars to the client. Do NOT expose
+    // LIGHTBASE_* (server-only) or SESSION_SECRET or any other secret.
+    envPrefix: 'VITE_',
+
+    // Define VITE_DB_PROVIDER as a build-time constant so Vite's
+    // dead-code elimination can drop the `if (provider === 'lightbase')`
+    // branch entirely when provider=api. This prevents the static
+    // `import.meta.env.VITE_LIGHTBASE_API_KEY` accesses inside that
+    // branch from being inlined into the client bundle.
     define: {
-      'process.env': env
+      'import.meta.env.VITE_DB_PROVIDER': JSON.stringify(loadEnv(mode, process.cwd(), 'VITE_').VITE_DB_PROVIDER || 'api'),
+    },
+
+    build: {
+      chunkSizeWarningLimit: 800,
     },
   };
 });

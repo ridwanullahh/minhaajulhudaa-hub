@@ -5,28 +5,49 @@
  *
  * Single source of truth for which database backend the application uses.
  *
- * Set `VITE_DB_PROVIDER=lightbase` (default) to use Lightbase BaaS via the
- * core `/api/v1` endpoint. Set `VITE_DB_PROVIDER=github` to fall back to
- * the legacy GitHub-repo-as-database implementation (UniversalSDK for
- * global collections, RealTimeGitHubDB for platform-scoped collections).
+ * Three providers, switchable via `VITE_DB_PROVIDER`:
  *
- * The Lightbase implementation is the production default. The GitHub
- * implementation is kept intact so operators can manually switch back by
- * changing a single env var - there is NO automatic fallback, by design,
- * so that every part of the app always reads and writes through the same
- * provider and there are no data-discrepancy surprises.
+ *   `api` (default, production-recommended)
+ *     - Talks to the Astro backend (/api/db/*) which proxies to Lightbase.
+ *     - The Lightbase API key lives server-side and NEVER reaches the
+ *       browser. Use this in production.
+ *
+ *   `lightbase`
+ *     - Talks to Lightbase /api/v1 directly from the browser.
+ *     - The API key is in the client bundle. Use only for local dev /
+ *       debugging when the Astro backend is not running.
+ *
+ *   `github`
+ *     - Legacy GitHub-repo-as-database (UniversalSDK + RealTimeGitHubDB).
+ *     - Kept as a fallback. The GitHub implementation is fully intact so
+ *       operators can manually switch back by changing one env var. There
+ *       is NO automatic fallback, by design, so every part of the app
+ *       always reads and writes through the same provider.
  */
 
 import config from './config';
-import { LightbaseSDK } from './lightbase-sdk';
+import { ApiProxySDK } from './api-proxy-sdk';
+
+// LightbaseSDK is lazily imported only when provider=lightbase, so the
+// Lightbase URL/key config is NEVER read (and therefore NEVER inlined
+// into the client bundle) when provider=api (the production default).
+let LightbaseSDKCtor: any = null;
+async function getLightbaseSDKCtor(): Promise<any> {
+  if (!LightbaseSDKCtor) {
+    const mod = await import('./lightbase-sdk');
+    LightbaseSDKCtor = mod.LightbaseSDK;
+  }
+  return LightbaseSDKCtor;
+}
 
 // ---------------------------------------------------------------------------
 // Provider selection
 // ---------------------------------------------------------------------------
 
-export type DbProvider = 'lightbase' | 'github';
+export type DbProvider = 'api' | 'lightbase' | 'github';
 
 export const DB_PROVIDER: DbProvider = config.db.provider;
+export const IS_API = DB_PROVIDER === 'api';
 export const IS_LIGHTBASE = DB_PROVIDER === 'lightbase';
 export const IS_GITHUB = DB_PROVIDER === 'github';
 
@@ -46,7 +67,11 @@ let _globalDb: any = null;
 
 export async function getGlobalDb(): Promise<any> {
   if (_globalDb) return _globalDb;
-  if (IS_LIGHTBASE) {
+  if (IS_API) {
+    _globalDb = new ApiProxySDK({ baseUrl: config.app.apiUrl });
+    await _globalDb.init();
+  } else if (IS_LIGHTBASE) {
+    const LightbaseSDK = await getLightbaseSDKCtor();
     _globalDb = new LightbaseSDK({
       baseUrl: config.lightbase.baseUrl,
       apiKey: config.lightbase.apiKey,
@@ -55,8 +80,8 @@ export async function getGlobalDb(): Promise<any> {
     await _globalDb.init();
   } else {
     // Lazy-load the legacy SDK so it is never instantiated when the
-    // operator has chosen Lightbase (keeps the bundle lean and avoids
-    // requiring GitHub creds for Lightbase-only deployments).
+    // operator has chosen api/lightbase (keeps the bundle lean and
+    // avoids requiring GitHub creds for non-github deployments).
     const UniversalSDK = (await import('./github-db-sdk')).default;
     const schemas = (await import('./db-schemas')).default;
     _globalDb = new UniversalSDK({
@@ -186,7 +211,10 @@ let _platformDb: any = null;
 
 export async function getPlatformDb(): Promise<any> {
   if (_platformDb) return _platformDb;
-  if (IS_LIGHTBASE) {
+  if (IS_API) {
+    _platformDb = new ApiProxySDK({ baseUrl: config.app.apiUrl });
+  } else if (IS_LIGHTBASE) {
+    const LightbaseSDK = await getLightbaseSDKCtor();
     _platformDb = new LightbaseSDK({
       baseUrl: config.lightbase.baseUrl,
       apiKey: config.lightbase.apiKey,
@@ -225,33 +253,33 @@ class PlatformDbProxy {
 
   async get<T = any>(platform: string, collection: string): Promise<T[]> {
     const db = await this.ensure();
-    if (IS_LIGHTBASE) return db.getPlatform<T>(platform, collection);
+    if (IS_API || IS_LIGHTBASE) return db.getPlatform<T>(platform, collection);
     return db.get<T>(platform, collection);
   }
   async insert<T = any>(platform: string, collection: string, item: Partial<T>): Promise<T & { id: string; createdAt: string; updatedAt: string }> {
     const db = await this.ensure();
-    if (IS_LIGHTBASE) return db.insertPlatform<T>(platform, collection, item);
+    if (IS_API || IS_LIGHTBASE) return db.insertPlatform<T>(platform, collection, item);
     return db.insert<T>(platform, collection, item);
   }
   async update<T = any>(platform: string, collection: string, id: string, updates: Partial<T>): Promise<T & { id: string; createdAt: string; updatedAt: string }> {
     const db = await this.ensure();
-    if (IS_LIGHTBASE) return db.updatePlatform<T>(platform, collection, id, updates);
+    if (IS_API || IS_LIGHTBASE) return db.updatePlatform<T>(platform, collection, id, updates);
     return db.update<T>(platform, collection, id, updates);
   }
   async delete(platform: string, collection: string, id: string): Promise<boolean> {
     const db = await this.ensure();
-    if (IS_LIGHTBASE) return db.deletePlatform(platform, collection, id);
+    if (IS_API || IS_LIGHTBASE) return db.deletePlatform(platform, collection, id);
     return db.delete(platform, collection, id);
   }
   async find<T = any>(platform: string, collection: string, query: Partial<T>): Promise<T[]> {
     const db = await this.ensure();
-    if (IS_LIGHTBASE) return db.findPlatform<T>(platform, collection, query);
+    if (IS_API || IS_LIGHTBASE) return db.findPlatform<T>(platform, collection, query);
     return db.find<T>(platform, collection, query);
   }
   subscribe<T = any>(platform: string, collection: string, callback: (data: T[]) => void): () => void {
     let unsub: (() => void) | null = null;
     this.ensure().then((db) => {
-      if (IS_LIGHTBASE) {
+      if (IS_API || IS_LIGHTBASE) {
         unsub = db.subscribePlatform<T>(platform, collection, callback);
       } else {
         unsub = db.subscribe<T>(platform, collection, callback);
@@ -281,4 +309,4 @@ class PlatformDbProxy {
 
 export const platformDb = new PlatformDbProxy();
 
-export default { globalDb, platformDb, IS_LIGHTBASE, IS_GITHUB, DB_PROVIDER };
+export default { globalDb, platformDb, IS_API, IS_LIGHTBASE, IS_GITHUB, DB_PROVIDER };
