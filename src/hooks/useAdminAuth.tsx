@@ -8,11 +8,19 @@ interface AuthContextType {
 
 const AdminAuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Helper function to parse admin credentials from .env
+// Helper function to parse admin credentials from .env.
+// Uses a switch with static import.meta.env.VITE_X accesses so Vite
+// does NOT inline the entire env object (which would leak secrets).
 const getAdminCredentials = (platform: string): Map<string, string> => {
     const credentials = new Map<string, string>();
-    const envVar = `VITE_ADMIN_USERS_${platform.toUpperCase()}`;
-    const credString = import.meta.env[envVar] || '';
+    let credString = '';
+    switch (platform.toUpperCase()) {
+        case 'SCHOOL': credString = import.meta.env.VITE_ADMIN_USERS_SCHOOL || ''; break;
+        case 'MASJID': credString = import.meta.env.VITE_ADMIN_USERS_MASJID || ''; break;
+        case 'CHARITY': credString = import.meta.env.VITE_ADMIN_USERS_CHARITY || ''; break;
+        case 'TRAVELS': credString = import.meta.env.VITE_ADMIN_USERS_TRAVELS || ''; break;
+        default: credString = '';
+    }
 
     credString.split(',').forEach(pair => {
         const [user, pass] = pair.split(':');
