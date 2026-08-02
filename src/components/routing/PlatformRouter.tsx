@@ -1,83 +1,88 @@
-import React from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
-import { usePlatform } from '@/hooks/usePlatform';
-
-// School Pages
-import SchoolHome from '@/pages/school/Home';
-import SchoolAbout from '@/pages/school/About';
-import SchoolPrograms from '@/pages/school/Programs';
-import SchoolProgramSingle from '@/pages/school/ProgramSingle';
-import SchoolClasses from '@/pages/school/Classes';
-import SchoolClassSingle from '@/pages/school/ClassSingle';
-import SchoolAdmissions from '@/pages/school/Admissions';
-import SchoolBlog from '@/pages/school/Blog';
-import SchoolBlogPost from '@/pages/school/BlogPost';
-import SchoolEvents from '@/pages/school/Events';
-import SchoolGallery from '@/pages/school/Gallery';
-import SchoolLibrary from '@/pages/school/Library';
-import SchoolShop from '@/pages/school/Shop';
-import SchoolProductSingle from '@/pages/school/ProductSingle';
-import SchoolCart from '@/pages/school/Cart';
-import SchoolCheckout from '@/pages/school/Checkout';
-import SchoolPortalDashboard from '@/pages/school/PortalDashboard';
-import SchoolCourses from '@/pages/school/Courses';
-import SchoolContact from '@/pages/school/Contact';
-import TeacherPortal from '@/pages/school/lms/TeacherPortal';
-import AssignmentGrading from '@/pages/school/lms/AssignmentGrading';
-import QuizBuilder from '@/pages/school/lms/QuizBuilder';
-
-// Masjid Pages
-import MasjidHome from '@/pages/masjid/Home';
-import MasjidAbout from '@/pages/masjid/About';
-import MasjidPrayerTimes from '@/pages/masjid/PrayerTimes';
-import MasjidEvents from '@/pages/masjid/Events';
-import MasjidAudioLibrary from '@/pages/masjid/AudioLibrary';
-import MasjidBlog from '@/pages/masjid/Blog';
-import MasjidBlogPost from '@/pages/masjid/BlogPost';
-import MasjidDonations from '@/pages/masjid/Donations';
-import MasjidContact from '@/pages/masjid/Contact';
-
-// Charity Pages
-import CharityHome from '@/pages/charity/Home';
-import CharityAbout from '@/pages/charity/About';
-import CharityCampaigns from '@/pages/charity/Campaigns';
-import CharityCampaignSingle from '@/pages/charity/CampaignSingle';
-import CharityProjects from '@/pages/charity/Projects';
-import CharityProjectSingle from '@/pages/charity/ProjectSingle';
-import CharityBlog from '@/pages/charity/Blog';
-import CharityBlogPost from '@/pages/charity/BlogPost';
-import CharityVolunteer from '@/pages/charity/Volunteer';
-import CharityTestimonials from '@/pages/charity/Testimonials';
-import CharityContact from '@/pages/charity/Contact';
-import CharityZakat from '@/pages/charity/Zakat';
-import CharityImpactDashboard from '@/pages/charity/ImpactDashboard';
-
-// Travels Pages
-import TravelsHome from '@/pages/travels/Home';
-import TravelsAbout from '@/pages/travels/About';
-import TravelsPackages from '@/pages/travels/Packages';
-import TravelsPackageSingle from '@/pages/travels/PackageSingle';
-import TravelsBooking from '@/pages/travels/Booking';
-import TravelsBlog from '@/pages/travels/Blog';
-import TravelsBlogPost from '@/pages/travels/BlogPost';
-import TravelsReviews from '@/pages/travels/Reviews';
-import TravelsCourses from '@/pages/travels/Courses';
-import TravelsContact from '@/pages/travels/Contact';
-import TravelsDynamicPricing from '@/pages/travels/DynamicPricing';
-
-// Admin Pages
-import AdminDashboard from '@/pages/admin/Dashboard';
+import React, { Suspense } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import { LoadingState } from '@/components/ui/states';
 import AdminProtectedRoute from '@/components/routing/AdminProtectedRoute';
-import NotFound from '@/pages/NotFound';
+
+// BismiLLAH Ar-Rahman Ar-Roheem.
+//
+// Code-split platform routes with React.lazy so each platform's pages
+// load on demand. This reduces the initial bundle from ~760KB to just
+// the RootDirectory + shared chunks, then lazy-loads each platform's
+// pages when the user navigates to it.
+//
+// Addresses PRODUCTION_GAPS.md item 5.1 (bundle size > 500KB).
+
+const NotFound = React.lazy(() => import('@/pages/NotFound'));
+const AdminDashboard = React.lazy(() => import('@/pages/admin/Dashboard'));
+
+// School pages
+const SchoolHome = React.lazy(() => import('@/pages/school/Home'));
+const SchoolAbout = React.lazy(() => import('@/pages/school/About'));
+const SchoolPrograms = React.lazy(() => import('@/pages/school/Programs'));
+const SchoolProgramSingle = React.lazy(() => import('@/pages/school/ProgramSingle'));
+const SchoolClasses = React.lazy(() => import('@/pages/school/Classes'));
+const SchoolClassSingle = React.lazy(() => import('@/pages/school/ClassSingle'));
+const SchoolAdmissions = React.lazy(() => import('@/pages/school/Admissions'));
+const SchoolBlog = React.lazy(() => import('@/pages/school/Blog'));
+const SchoolBlogPost = React.lazy(() => import('@/pages/school/BlogPost'));
+const SchoolEvents = React.lazy(() => import('@/pages/school/Events'));
+const SchoolGallery = React.lazy(() => import('@/pages/school/Gallery'));
+const SchoolLibrary = React.lazy(() => import('@/pages/school/Library'));
+const SchoolShop = React.lazy(() => import('@/pages/school/Shop'));
+const SchoolProductSingle = React.lazy(() => import('@/pages/school/ProductSingle'));
+const SchoolCart = React.lazy(() => import('@/pages/school/Cart'));
+const SchoolCheckout = React.lazy(() => import('@/pages/school/Checkout'));
+const SchoolPortalDashboard = React.lazy(() => import('@/pages/school/PortalDashboard'));
+const SchoolCourses = React.lazy(() => import('@/pages/school/Courses'));
+const SchoolContact = React.lazy(() => import('@/pages/school/Contact'));
+const TeacherPortal = React.lazy(() => import('@/pages/school/lms/TeacherPortal'));
+const AssignmentGrading = React.lazy(() => import('@/pages/school/lms/AssignmentGrading'));
+const QuizBuilder = React.lazy(() => import('@/pages/school/lms/QuizBuilder'));
+
+// Masjid pages
+const MasjidHome = React.lazy(() => import('@/pages/masjid/Home'));
+const MasjidAbout = React.lazy(() => import('@/pages/masjid/About'));
+const MasjidPrayerTimes = React.lazy(() => import('@/pages/masjid/PrayerTimes'));
+const MasjidEvents = React.lazy(() => import('@/pages/masjid/Events'));
+const MasjidAudioLibrary = React.lazy(() => import('@/pages/masjid/AudioLibrary'));
+const MasjidBlog = React.lazy(() => import('@/pages/masjid/Blog'));
+const MasjidBlogPost = React.lazy(() => import('@/pages/masjid/BlogPost'));
+const MasjidDonations = React.lazy(() => import('@/pages/masjid/Donations'));
+const MasjidContact = React.lazy(() => import('@/pages/masjid/Contact'));
+
+// Charity pages
+const CharityHome = React.lazy(() => import('@/pages/charity/Home'));
+const CharityAbout = React.lazy(() => import('@/pages/charity/About'));
+const CharityCampaigns = React.lazy(() => import('@/pages/charity/Campaigns'));
+const CharityCampaignSingle = React.lazy(() => import('@/pages/charity/CampaignSingle'));
+const CharityProjects = React.lazy(() => import('@/pages/charity/Projects'));
+const CharityProjectSingle = React.lazy(() => import('@/pages/charity/ProjectSingle'));
+const CharityBlog = React.lazy(() => import('@/pages/charity/Blog'));
+const CharityBlogPost = React.lazy(() => import('@/pages/charity/BlogPost'));
+const CharityVolunteer = React.lazy(() => import('@/pages/charity/Volunteer'));
+const CharityTestimonials = React.lazy(() => import('@/pages/charity/Testimonials'));
+const CharityContact = React.lazy(() => import('@/pages/charity/Contact'));
+const CharityZakat = React.lazy(() => import('@/pages/charity/Zakat'));
+const CharityImpactDashboard = React.lazy(() => import('@/pages/charity/ImpactDashboard'));
+
+// Travels pages
+const TravelsHome = React.lazy(() => import('@/pages/travels/Home'));
+const TravelsAbout = React.lazy(() => import('@/pages/travels/About'));
+const TravelsPackages = React.lazy(() => import('@/pages/travels/Packages'));
+const TravelsPackageSingle = React.lazy(() => import('@/pages/travels/PackageSingle'));
+const TravelsBooking = React.lazy(() => import('@/pages/travels/Booking'));
+const TravelsBlog = React.lazy(() => import('@/pages/travels/Blog'));
+const TravelsBlogPost = React.lazy(() => import('@/pages/travels/BlogPost'));
+const TravelsReviews = React.lazy(() => import('@/pages/travels/Reviews'));
+const TravelsCourses = React.lazy(() => import('@/pages/travels/Courses'));
+const TravelsContact = React.lazy(() => import('@/pages/travels/Contact'));
+const TravelsDynamicPricing = React.lazy(() => import('@/pages/travels/DynamicPricing'));
 
 interface PlatformRouterProps {
   platform: string;
 }
 
 const PlatformRouter: React.FC<PlatformRouterProps> = ({ platform }) => {
-  const location = useLocation();
-  const currentPath = location.pathname.replace(`/${platform}`, '') || '/';
-
   const renderSchoolRoutes = () => (
     <Routes>
       <Route path="/" element={<SchoolHome />} />
@@ -165,18 +170,17 @@ const PlatformRouter: React.FC<PlatformRouterProps> = ({ platform }) => {
     </Routes>
   );
 
-  switch (platform) {
-    case 'school':
-      return renderSchoolRoutes();
-    case 'masjid':
-      return renderMasjidRoutes();
-    case 'charity':
-      return renderCharityRoutes();
-    case 'travels':
-      return renderTravelsRoutes();
-    default:
-      return <NotFound />;
-  }
+  const routes = (() => {
+    switch (platform) {
+      case 'school': return renderSchoolRoutes();
+      case 'masjid': return renderMasjidRoutes();
+      case 'charity': return renderCharityRoutes();
+      case 'travels': return renderTravelsRoutes();
+      default: return <NotFound />;
+    }
+  })();
+
+  return <Suspense fallback={<LoadingState message="Loading..." rows={4} />}>{routes}</Suspense>;
 };
 
 export default PlatformRouter;
