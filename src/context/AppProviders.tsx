@@ -8,6 +8,7 @@ import { LoadingProvider } from './LoadingContext';
 import { AdminAuthProvider } from '@/hooks/useAdminAuth';
 import { AuthProvider } from '@/lib/auth';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import NotificationProvider from '@/components/NotificationSystem';
 
 const queryClient = new QueryClient();
 
@@ -22,7 +23,9 @@ export const AppProviders = ({ children }: { children: ReactNode }) => {
                                 <TooltipProvider>
                                     <Toaster />
                                     <Sonner />
-                                    {children}
+                                    <NotificationProvider>
+                                        {children}
+                                    </NotificationProvider>
                                 </TooltipProvider>
                             </LoadingProvider>
                         </AdminAuthProvider>
