@@ -55,17 +55,61 @@ export const GET: APIRoute = async ({ params, url, request }) => {
     if (!session) return unauthorized();
   }
 
-  const limit = parseInt(url.searchParams.get('limit') || '100', 10);
+  // Pagination: fetch limit+1 docs to determine hasMore. The `after`
+  // param is a document id; we fetch docs with id > after (ULID
+  // time-sortable, so this gives chronological ordering).
+  const requestedLimit = parseInt(url.searchParams.get('limit') || '100', 10);
+  const limit = Math.min(Math.max(requestedLimit, 1), 1000); // clamp 1-1000
+  const after = url.searchParams.get('after') || undefined;
   const filterParam = url.searchParams.get('filter');
   let filter: any = undefined;
   if (filterParam) {
     try { filter = JSON.parse(filterParam); } catch { /* ignore */ }
   }
   const sort = url.searchParams.get('sort') || undefined;
+  const countOnly = url.searchParams.get('count') === 'true';
 
   try {
-    const docs = await listDocs(collection, { limit, filter, sort });
-    return new Response(JSON.stringify({ data: docs, count: docs.length }), {
+    // If only count is requested, fetch all and count (Lightbase
+    // doesn't have a dedicated count endpoint in the current API)
+    if (countOnly) {
+      const allDocs = await listDocs(collection, { limit: 1000, filter });
+      return new Response(JSON.stringify({ count: allDocs.length }), {
+        status: 200, headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Fetch limit+1 to check if there are more docs
+    const fetchLimit = after ? limit + 1 : limit + 1;
+    const docs = await listDocs(collection, { limit: fetchLimit, filter, sort });
+
+    // If `after` is provided, filter out docs up to and including `after`
+    let result = docs;
+    if (after) {
+      const afterIdx = docs.findIndex((d) => d.id === after);
+      if (afterIdx >= 0) {
+        result = docs.slice(afterIdx + 1);
+      } else {
+        // after not found in results, start from beginning
+        result = docs;
+      }
+    }
+
+    // Check if there are more docs
+    const hasMore = result.length > limit;
+    if (hasMore) {
+      result = result.slice(0, limit);
+    }
+
+    // The cursor for the next page is the last doc's id
+    const nextCursor = hasMore && result.length > 0 ? result[result.length - 1].id : null;
+
+    return new Response(JSON.stringify({
+      data: result,
+      count: result.length,
+      hasMore,
+      nextCursor,
+    }), {
       status: 200, headers: { 'Content-Type': 'application/json' },
     });
   } catch (err: any) {

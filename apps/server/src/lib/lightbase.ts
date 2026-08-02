@@ -67,13 +67,31 @@ export async function insertDoc(collection: string, doc: any): Promise<Lightbase
   return json.document as LightbaseDoc;
 }
 
-export async function updateDoc(collection: string, id: string, patch: any): Promise<LightbaseDoc> {
-  const res = await fetch(`${apiUrl(`/collections/${encodeURIComponent(collection)}/${encodeURIComponent(id)}`)}`, {
+export async function updateDoc(collection: string, id: string, patch: any, expectedRevision?: number): Promise<LightbaseDoc> {
+  const reqHeaders = headers();
+  // If-Match header for optimistic concurrency: if the document's
+  // _revision on the server doesn't match expectedRevision, Lightbase
+  // returns 409 Conflict. This prevents silent overwrites when two
+  // clients edit the same document concurrently.
+  if (expectedRevision !== undefined) {
+    reqHeaders['If-Match'] = String(expectedRevision);
+  }
+
+  let res = await fetch(`${apiUrl(`/collections/${encodeURIComponent(collection)}/${encodeURIComponent(id)}`)}`, {
     method: 'PATCH',
-    headers: headers(),
+    headers: reqHeaders,
     body: JSON.stringify(patch),
   });
-  if (!res.ok) throw new Error(`Lightbase updateDoc failed: ${res.status}`);
+
+  // On 409 Conflict, throw a typed error so callers can retry
+  if (res.status === 409) {
+    const conflictErr: any = new Error('Document was modified by another client (revision conflict)');
+    conflictErr.code = 'CONFLICT';
+    conflictErr.status = 409;
+    throw conflictErr;
+  }
+
+  if (!res.ok) throw new Error(`Lightbase updateDoc failed: ${res.status} ${await res.text()}`);
   const json = await res.json();
   return (json.document || json) as LightbaseDoc;
 }
