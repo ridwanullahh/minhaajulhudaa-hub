@@ -22,6 +22,9 @@ import SchoolCheckout from '@/pages/school/Checkout';
 import SchoolPortalDashboard from '@/pages/school/PortalDashboard';
 import SchoolCourses from '@/pages/school/Courses';
 import SchoolContact from '@/pages/school/Contact';
+import TeacherPortal from '@/pages/school/lms/TeacherPortal';
+import AssignmentGrading from '@/pages/school/lms/AssignmentGrading';
+import QuizBuilder from '@/pages/school/lms/QuizBuilder';
 
 // Masjid Pages
 import MasjidHome from '@/pages/masjid/Home';
@@ -95,6 +98,9 @@ const PlatformRouter: React.FC<PlatformRouterProps> = ({ platform }) => {
       <Route path="/cart" element={<SchoolCart />} />
       <Route path="/checkout" element={<SchoolCheckout />} />
       <Route path="/portal" element={<SchoolPortalDashboard />} />
+      <Route path="/portal/teacher" element={<TeacherPortal />} />
+      <Route path="/portal/grading/:id" element={<AssignmentGrading />} />
+      <Route path="/portal/quiz-builder" element={<QuizBuilder />} />
       <Route path="/contact" element={<SchoolContact />} />
       <Route path="/admin/*" element={<AdminProtectedRoute platform="school"><AdminDashboard platform="school" /></AdminProtectedRoute>} />
       <Route path="*" element={<NotFound />} />
