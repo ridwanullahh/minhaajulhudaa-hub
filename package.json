@@ -14,6 +14,8 @@
     "build:server": "npm --workspace @minhaajulhudaa/server run build",
     "build:all": "npm run build && npm run build:server",
     "build:dev": "vite build --mode development",
+    "start": "npm run build:all && node apps/server/dist/server/entry.mjs",
+    "start:prod": "node apps/server/dist/server/entry.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "seed": "node scripts/tools/seed-lightbase.mjs"

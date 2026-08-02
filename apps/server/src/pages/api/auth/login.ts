@@ -12,8 +12,8 @@
  * Response: { user: {...without password}, token, expiresAt }
  */
 import type { APIRoute } from 'astro';
-import { listDocs, updateDoc } from '../../../lib/lightbase';
-import { createSessionToken, verifyPassword, hashPassword } from '../../../lib/auth-server';
+import { listDocs, updateDoc } from '@/lib/lightbase';
+import { createSessionToken, verifyPassword, hashPassword } from '@/lib/auth-server';
 
 export const POST: APIRoute = async ({ request }) => {
   let body: any;
