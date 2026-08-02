@@ -9,6 +9,7 @@ import { AdminAuthProvider } from '@/hooks/useAdminAuth';
 import { AuthProvider } from '@/lib/auth';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import NotificationProvider from '@/components/NotificationSystem';
+import GoogleAnalytics from '@/components/GoogleAnalytics';
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ export const AppProviders = ({ children }: { children: ReactNode }) => {
                                     <Sonner />
                                     <NotificationProvider>
                                         {children}
+                                        <GoogleAnalytics />
                                     </NotificationProvider>
                                 </TooltipProvider>
                             </LoadingProvider>
