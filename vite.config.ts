@@ -1,6 +1,7 @@
 import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
+import { fileURLToPath } from "node:url";
 
 // BismiLLAH Ar-Rahman Ar-Roheem.
 //
@@ -19,6 +20,9 @@ import path from "path";
 //
 // Dev proxy: /api/* is proxied to the Astro backend (port 4321) so the
 // React app can call /api/db/* and /api/auth/* as same-origin in dev.
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 async function loadPlugins(mode: string) {
   const plugins: any[] = [react()];
