@@ -7,7 +7,7 @@
  * React app to verify the backend is reachable and the DB is wired.
  */
 import type { APIRoute } from 'astro';
-import { isConfigured, getConfig, listDocs } from '../../lib/lightbase';
+import { isConfigured, getConfig, listDocs } from '@/lib/lightbase';
 
 export const GET: APIRoute = async () => {
   const config = getConfig();

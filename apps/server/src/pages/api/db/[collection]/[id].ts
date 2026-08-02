@@ -15,8 +15,8 @@
  *   - PATCH / DELETE: always require Bearer token.
  */
 import type { APIRoute } from 'astro';
-import { getDoc, updateDoc, deleteDoc } from '../../../../lib/lightbase';
-import { verifySessionToken, getBearerToken } from '../../../../lib/auth-server';
+import { getDoc, updateDoc, deleteDoc } from '@/lib/lightbase';
+import { verifySessionToken, getBearerToken } from '@/lib/auth-server';
 
 const PUBLIC_COLLECTIONS = new Set([
   'school_blog_posts', 'school_events', 'school_programs', 'school_courses', 'school_classes', 'school_library', 'school_shop_products', 'school_announcements',
