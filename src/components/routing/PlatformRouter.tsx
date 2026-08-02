@@ -46,6 +46,7 @@ import CharityBlogPost from '@/pages/charity/BlogPost';
 import CharityVolunteer from '@/pages/charity/Volunteer';
 import CharityTestimonials from '@/pages/charity/Testimonials';
 import CharityContact from '@/pages/charity/Contact';
+import CharityZakat from '@/pages/charity/Zakat';
 
 // Travels Pages
 import TravelsHome from '@/pages/travels/Home';
@@ -129,6 +130,7 @@ const PlatformRouter: React.FC<PlatformRouterProps> = ({ platform }) => {
       <Route path="/blog/:slug" element={<CharityBlogPost />} />
       <Route path="/volunteer" element={<CharityVolunteer />} />
       <Route path="/testimonials" element={<CharityTestimonials />} />
+      <Route path="/zakat" element={<CharityZakat />} />
       <Route path="/contact" element={<CharityContact />} />
       <Route path="/admin/*" element={<AdminProtectedRoute platform="charity"><AdminDashboard platform="charity" /></AdminProtectedRoute>} />
       <Route path="*" element={<NotFound />} />
